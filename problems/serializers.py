@@ -41,3 +41,9 @@ class ProblemSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Problem
         fields = ['created_by', 'title', 'note', 'problem_statement', 'input_format', 'constraints', 'output_format', 'tags', 'problem_level']
+
+
+class SubmissionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Submission
+        fields = '__all__'
