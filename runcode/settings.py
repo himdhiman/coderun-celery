@@ -78,10 +78,10 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': "db17prasavmv4a",
-        'USER': "koflopajwtfyaf",
-        'PASSWORD': "e9077a83933c92207985e1851eb8e7d040b92cb8ef19a2dd8cfd3bbe1aebc4f0",
-        'HOST': "ec2-44-199-19-76.compute-1.amazonaws.com",
+        'NAME': "d7l1t76omfkjru",
+        'USER': "bzhgtmkcbhcpba",
+        'PASSWORD': "fa95ce814dc88c9eb078a2f4806091b6815345788e7021d6c4ac49df9eb3307c",
+        'HOST': "ec2-34-202-178-115.compute-1.amazonaws.com",
         'PORT': 5432,
     }
 }
@@ -101,7 +101,7 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [("localhost", 6379)],
+            "hosts": ["redis://:pa70c1b0adbe58f8dab740372fba1301344cc29e5a315adc0d6ff2f6c4dfc06dc@ec2-54-146-105-205.compute-1.amazonaws.com:24549"],
         },
     },
 }
@@ -147,7 +147,7 @@ MEDIA_URL = '/media/'
 
 # Celery Settings
 
-CELERY_BROKER_URL = 'redis://localhost:6379'
+CELERY_BROKER_URL = 'redis://:pa70c1b0adbe58f8dab740372fba1301344cc29e5a315adc0d6ff2f6c4dfc06dc@ec2-54-146-105-205.compute-1.amazonaws.com:24549'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TASK_SERIALIZER = 'json'
