@@ -1,0 +1,38 @@
+version: "3"
+
+# networks:
+#   dirtybitsnetwork:
+#     name: dirtybitsnetwork
+#     driver: bridge
+
+services:
+  code_web:
+    build: .
+    container_name: code_web
+    command: >
+      sh -c "python3 manage.py wait_for_db &&
+             gunicorn runcode.wsgi:application --bind 0.0.0.0:8000"
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    environment:
+      - DB_HOST=code_db
+      - DB_NAME=code
+      - DB_USER=server
+      - DB_PASSWORD=server
+    # networks:
+    #   - dirtybitsnetwork
+    depends_on:
+      - code_db
+  code_db:
+    image: postgres
+    container_name: code_db
+    environment:
+      - POSTGRES_DB=code
+      - POSTGRES_USER=server
+      - POSTGRES_PASSWORD=server
+    ports:
+      - "5432:5432"
+    # networks:
+    #   - dirtybitsnetwork
