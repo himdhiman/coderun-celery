@@ -18,6 +18,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'corsheaders',
+    'django_celery_results',
+    'django_celery_beat',
+
     'core',
     'problems',
 ]
@@ -68,13 +71,24 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 #     }
 # }
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': "db17prasavmv4a",
+#         'USER': "koflopajwtfyaf",
+#         'PASSWORD': "e9077a83933c92207985e1851eb8e7d040b92cb8ef19a2dd8cfd3bbe1aebc4f0",
+#         'HOST': "ec2-44-199-19-76.compute-1.amazonaws.com",
+#         'PORT': 5432,
+#     }
+# }
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': "db17prasavmv4a",
-        'USER': "koflopajwtfyaf",
-        'PASSWORD': "e9077a83933c92207985e1851eb8e7d040b92cb8ef19a2dd8cfd3bbe1aebc4f0",
-        'HOST': "ec2-44-199-19-76.compute-1.amazonaws.com",
+        'NAME': 'runcode',
+        'USER': 'postgres',
+        'PASSWORD': 'Himanshu',
+        'HOST': 'localhost',
         'PORT': 5432,
     }
 }
@@ -96,13 +110,15 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Kolkata'
 
 USE_I18N = True
 
 USE_L10N = True
 
 USE_TZ = True
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
@@ -114,3 +130,19 @@ STATIC_URL = '/static/'
 
 MEDIA_ROOT  = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+
+
+# Celery Settings
+
+CELERY_BROKER_URL = 'redis://127.0.0.1:6379'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Asia/Kolkata'
+
+CELERY_RESULT_BACKEND = 'django-db'
+
+
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+
+

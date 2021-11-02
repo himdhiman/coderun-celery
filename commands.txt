@@ -1,0 +1,2 @@
+celery -A runcode.celery worker --pool=solo -l INFO
+celery -A runcode beat -l INFO
