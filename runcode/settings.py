@@ -75,27 +75,27 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 #     }
 # }
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': "db17prasavmv4a",
-#         'USER': "koflopajwtfyaf",
-#         'PASSWORD': "e9077a83933c92207985e1851eb8e7d040b92cb8ef19a2dd8cfd3bbe1aebc4f0",
-#         'HOST': "ec2-44-199-19-76.compute-1.amazonaws.com",
-#         'PORT': 5432,
-#     }
-# }
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'runcode',
-        'USER': 'postgres',
-        'PASSWORD': 'Himanshu',
-        'HOST': 'localhost',
+        'NAME': "db17prasavmv4a",
+        'USER': "koflopajwtfyaf",
+        'PASSWORD': "e9077a83933c92207985e1851eb8e7d040b92cb8ef19a2dd8cfd3bbe1aebc4f0",
+        'HOST': "ec2-44-199-19-76.compute-1.amazonaws.com",
         'PORT': 5432,
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'runcode',
+#         'USER': 'postgres',
+#         'PASSWORD': 'Himanshu',
+#         'HOST': 'localhost',
+#         'PORT': 5432,
+#     }
+# }
 
 CHANNEL_LAYERS = {
     "default": {
