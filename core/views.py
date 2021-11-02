@@ -26,20 +26,23 @@ class RunCode(APIView):
     permission_classes = (permissions.AllowAny, )
     def post(self, request, uid):
         body = json.loads(request.body)
-        headers = request.headers.get("Authorization")
-        mail_id = None
-        if not headers:
-            return Response(status = status.HTTP_401_UNAUTHORIZED)
-        else:
-            access_token = headers.split(' ')[1]
-            response = middleware.Authentication.isAuthenticated(access_token)
-            if not response["success"]:
-                return Response(status = status.HTTP_401_UNAUTHORIZED)
-            else:
-                mail_id = response['data']['email']
-        if not mail_id:
-            return Response(status = status.HTTP_401_UNAUTHORIZED)
-        body["created_By"] = mail_id
+        # headers = request.headers.get("Authorization")
+        # mail_id = None
+        # if not headers:
+        #     return Response(status = status.HTTP_401_UNAUTHORIZED)
+        # else:
+        #     access_token = headers.split(' ')[1]
+        #     response = middleware.Authentication.isAuthenticated(access_token)
+        #     if not response["success"]:
+        #         return Response(status = status.HTTP_401_UNAUTHORIZED)
+        #     else:
+        #         mail_id = response['data']['email']
+        # if not mail_id:
+        #     return Response(status = status.HTTP_401_UNAUTHORIZED)
+
+        # body["created_By"] = mail_id
+        body["created_By"] = "server@gmail.com"
+
         context = {"body" : body, "uid": uid}
         tasks.runCode.delay(context)
         return Response(status = status.HTTP_202_ACCEPTED)

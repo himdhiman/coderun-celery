@@ -23,4 +23,7 @@ def runcode_helper(req_data):
         'x-rapidapi-key': "3bad142ebamshd424a4c3b68c90ep1da74ajsneb947385a6ff"
     }
     res = requests.request("POST", url, data = json.dumps(payload), headers = headers, params = querystring)
-    return res.json()
+    try:
+        return res.json()
+    except:
+        return res.text
