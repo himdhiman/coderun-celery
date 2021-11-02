@@ -58,8 +58,6 @@ class Submission(models.Model):
     code = models.TextField(blank = False)
     status = models.CharField(max_length = 30, default = "Queued")
     error = models.TextField(null=True, blank = True)
-    input_Given = models.TextField(null=True, blank = True)
-    output_Generated = models.TextField(null=True, blank = True) 
     test_Cases_Passed = models.IntegerField(null=True, blank = True)
     total_Test_Cases = models.IntegerField(null=True, blank = True)
     score = models.IntegerField(null=True, blank = True)

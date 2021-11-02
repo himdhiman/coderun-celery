@@ -18,52 +18,6 @@ def runCode(discarded_arg, context):
     if(response.is_valid()):
         inst = response.save()
     
-    else:
-        print("invalid")
-
-    #     if(inst.inputGiven != ""):
-    #         data = {'id' : inst.id, 'code' : inst.code, 'lang' : inst.language, 'inp' : inst.inputGiven, 'problemId' : inst.problemId}
-    #     else:
-    #         data = {'id' : inst.id, 'code' : inst.code, 'lang' : inst.language, 'problemId' : inst.problemId}
-
-    #     probId = data['problemId']
-    #     totaltc = Problem.objects.get(id = probId).totalTC
-
-    #     tempPath = os.path.join(BASE_DIR, "Codes", str(uid))
-    #     os.system(f"mkdir {tempPath}")
-
-    #     inpPath = tempPath+"/"+"input.txt"
-    #     os.system(f"touch {inpPath}")
-    #     outPath = tempPath+"/"+"output.txt"
-    #     os.system(f"touch {outPath}")
-    #     logPath = tempPath+"/"+"output.log"
-    #     os.system(f"touch {logPath}")
-    #     progPath = None
-    #     bashPath = tempPath+"/"+"a.out"
-
-    #     if data['lang'] == "CP":
-    #         progPath = tempPath+"/"+"main.cpp"
-    #         os.system(f"touch {progPath}")
-    #         f = open(os.path.join(tempPath, 'main.cpp'), "w")
-    #         f.write(data['code'])
-    #         f.close()
-
-    #     if data['lang'] == "P3":
-    #         progPath = tempPath+"/"+"main.py"
-    #         os.system(f"touch {progPath}")
-    #         f = open(os.path.join(tempPath, 'main.py'), "w")
-    #         f.write(data['code'])
-    #         f.close()
-
-    #     isInputGiven = False
-
-    #     if('inp' in data.keys() and data['inp'] != None):
-    #         isInputGiven = True
-    #         f = open(inpPath, "w")
-    #         f.write(data['inp'])
-    #         f.close()
-
-    #     os.chdir(tempPath)
     #     if data['lang'] == "CP":
     #         os.system(f'g++ {progPath}')
     #         cnt = 0
