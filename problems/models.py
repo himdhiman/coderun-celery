@@ -38,11 +38,6 @@ class Problem(models.Model):
     def __str__(self):
         return f"({self.id}) - " + self.title
 
-
-class UploadTC(models.Model):
-    name = models.ForeignKey(to = "Problem", on_delete = models.CASCADE)
-    testcases = models.FileField(upload_to = "tempTC/", blank = True, null = True)
-
 class Bookmark(models.Model):
     user = models.EmailField(max_length = 150)
     data = models.TextField(null = True, blank = True)
