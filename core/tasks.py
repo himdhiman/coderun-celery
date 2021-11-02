@@ -1,4 +1,3 @@
-import os
 from celery import shared_task
 from problems import models, serializers
 from pathlib import Path
@@ -7,6 +6,7 @@ from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 from django.core import serializers as djSerializer
 from problems import middleware
+from core.helper import runcode_helper
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 channel_layer = get_channel_layer()
@@ -18,15 +18,11 @@ def runCode(discarded_arg, context):
     if(response.is_valid()):
         inst = response.save()
     
-    #     if data['lang'] == "CP":
-    #         os.system(f'g++ {progPath}')
-    #         cnt = 0
-    #         if(isInputGiven == False):
     #             for i in range(1, totaltc+1):
     #                 isSame = True
-    #                 inpPath = os.path.join(BASE_DIR, "media", 'TestCases', str(probId), 'input'+str(i)+'.txt')
+    #                 inpPath = os.path.join(BASE_DIR, "media", 'TestCases', str(probId), 'tc-input'+str(i)+'.txt')
     #                 os.system(f'{bashPath} < {inpPath} > {outPath}')
-    #                 with open(os.path.join(BASE_DIR, "media", 'TestCases', str(probId), 'output'+str(i)+'.txt')) as f1, open(outPath) as f2:
+    #                 with open(os.path.join(BASE_DIR, "media", 'TestCases', str(probId), 'tc-output'+str(i)+'.txt')) as f1, open(outPath) as f2:
     #                     for line1, line2 in zip(f1, f2):
     #                         if line1 != line2:
     #                             isSame = False
