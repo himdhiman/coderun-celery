@@ -12,15 +12,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 channel_layer = get_channel_layer()
 
 @shared_task(bind = True)
-def runCode(body, uid, email, temporaray):
-    print("body", body)
-    print("uid", uid)
-    print("email", email)
-
-
-    # response = serializers.SubmissionSerializer(data = body)
-    # if(response.is_valid()):
-        # inst = response.save()
+def runCode(discarded_arg, context):
+    print(f"body - {context}")
+    response = serializers.SubmissionSerializer(data = context["body"])
+    if(response.is_valid()):
+        inst = response.save()
+    
+    else:
+        print("invalid")
 
     #     if(inst.inputGiven != ""):
     #         data = {'id' : inst.id, 'code' : inst.code, 'lang' : inst.language, 'inp' : inst.inputGiven, 'problemId' : inst.problemId}

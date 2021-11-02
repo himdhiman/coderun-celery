@@ -81,6 +81,10 @@ class UploadTestCases(APIView):
     permission_classes = (permissions.AllowAny, )
     def post(self, request):
         probId = request.data["probId"]
+        problem = Problem.objects.get(id = probId)
+        setattr(problem, "sample_Tc", request.data["custom_test_cases"])
+        setattr(problem, "total_Tc", request.data["test_cases"])
+        problem.save()
         path = os.path.join(settings.MEDIA_ROOT, "TestCases", str(probId))
         if not os.path.exists(path):
             os.mkdir(path)

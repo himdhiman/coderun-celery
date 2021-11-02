@@ -51,6 +51,8 @@ class RunCode(APIView):
                 mail_id = response['data']['email']
         if not mail_id:
             return Response(status = status.HTTP_401_UNAUTHORIZED)
-        tasks.runCode.delay(body, uid, mail_id)
+        body["created_By"] = mail_id
+        context = {"body" : body, "uid": uid}
+        tasks.runCode.delay(context)
         return Response(status = status.HTTP_202_ACCEPTED)
 
