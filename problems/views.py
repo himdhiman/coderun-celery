@@ -2,7 +2,7 @@ from rest_framework import permissions, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from problems.models import Problem, Tag
-from problems.serializers import TagSerializer, TagSerializerCreateProblem, ProblemListSerializer, ProblemSerializer
+from problems.serializers import TagSerializer, TagSerializerCreateProblem, ProblemListSerializer, ProblemSerializer, GetProblemSerializer
 from django.conf import settings
 import os, requests, json
 from problems import middleware
@@ -73,7 +73,7 @@ class GetProblem(APIView):
     permission_classes = (permissions.AllowAny, )
     def post(self, request):
         prob_obj = Problem.objects.get(id = request.data["id"])
-        data = ProblemSerializer(prob_obj)
+        data = GetProblemSerializer(prob_obj)
         return Response(data = data.data, status = status.HTTP_200_OK)
 
 
