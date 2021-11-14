@@ -26,7 +26,7 @@ def runCode(discarded_arg, context):
         counter = 0
     
         for i in range(1, totaltc+1):
-            inpPath = os.path.join(BASE_DIR, "media", 'TestCases', str(probId), 'tc-input'+str(i)+'.txt')
+            inpPath = os.path.join(BASE_DIR, "media", 'TestCases', str(probId), 'tc-input' + str(i) + '.txt')
             input_data = open(inpPath, 'r').read()
             data = {
                 "code" : body["code"],
