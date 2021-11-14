@@ -7,14 +7,13 @@ from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 from django.core import serializers as djSerializer
 from problems import middleware
-from core.helper import runcode_helper
+from core.helper import runcode_helper, encode_data, decode_data
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 channel_layer = get_channel_layer()
 
 @shared_task(bind = True)
 def runCode(discarded_arg, context):
-    print(context)
     body = context["body"]
     response = serializers.SubmissionSerializer(data = body)
     if(response.is_valid()):
@@ -22,21 +21,47 @@ def runCode(discarded_arg, context):
         probId = body["problem_Id"]
         prob = models.Problem.objects.get(id = probId)
         totaltc = prob.total_Tc
-        print(totaltc)
+
+        counter = 0
+
     
         for i in range(1, totaltc+1):
-            print(1)
             isSame = True
             inpPath = os.path.join(BASE_DIR, "media", 'TestCases', str(probId), 'tc-input'+str(i)+'.txt')
             input_data = open(inpPath, 'r').read()
-            print(input_data)
+            # print(input_data)
             data = {
                 "code" : body["code"],
                 "lang" : body["language"],
-                "input" : base64.b64encode(input_data.encode('ascii')) 
+                "input" : encode_data(input_data.strip())
             }
+            # print(data)
             result = runcode_helper(data)
-            print(result)
+            # print(result)
+            if result["status"]["description"] == "Accepted":
+                if not result["stdout"]:
+                    print("No Output Generated")
+                    async_to_sync(channel_layer.group_send)("user_" + context["uid"], {'type': 'sendResult', 'text' : "No Output Generated"})
+                    break
+                decoded_stdout = decode_data(result["stdout"])
+                outPath = os.path.join(BASE_DIR, "media", 'TestCases', str(probId), 'tc-output' + str(i) + '.txt')
+                output_data = open(outPath, 'r').read()
+                output_data = output_data.strip()
+                if output_data == decoded_stdout:
+                    counter += 1
+                    print("Accepted")
+                    async_to_sync(channel_layer.group_send)("user_" + str(context["uid"]), {'type': 'sendStatus', 'text' : f"Passed/{i}/{totaltc}"})
+                else:
+                    print("wrong ans")
+                    print(output_data, decoded_stdout)
+                    async_to_sync(channel_layer.group_send)("user_" + str(context["uid"]), {'type': 'sendStatus', 'text' : f"Wrong Answer/{i}/{totaltc}"})
+            else:
+                print(result["status"]["description"])
+                status = result["status"]["description"]
+                print(decode_data(result["compile_output"]))
+                async_to_sync(channel_layer.group_send)("user_" + str(context["uid"]), {'type': 'sendStatus', 'text' : f"{status}/{i}/{totaltc}"})
+                async_to_sync(channel_layer.group_send)("user_" + context["uid"], {'type': 'sendResult', 'text' : status})
+                break
     else:
         print("invalid", response.error_messages)
 

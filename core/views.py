@@ -24,7 +24,7 @@ class CompileCode(APIView):
 
 class RunCode(APIView):
     permission_classes = (permissions.AllowAny, )
-    def post(self, request, uid):
+    def post(self, request):
         body = json.loads(request.body)
         # headers = request.headers.get("Authorization")
         # mail_id = None
@@ -43,7 +43,12 @@ class RunCode(APIView):
         # body["created_By"] = mail_id
         body["created_By"] = "server@gmail.com"
 
-        context = {"body" : body, "uid": uid}
+        arr1 = body["created_By"].split("@")
+        arr2 = arr1[1].split(".")
+        uid = arr1[0] + arr2[0] + arr2[1]
+
+        context = {"body" : body, "uid" : uid}
+        print(context["uid"])
         tasks.runCode.delay(context)
         return Response(status = status.HTTP_202_ACCEPTED)
 

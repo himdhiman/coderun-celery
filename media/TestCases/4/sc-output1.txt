@@ -1,7 +1,1 @@
-docker compose run web <cmd>
-docker-compose up --build
-
-docker exec -it kafka /bin/sh
-cd opt/kafka
-./bin/kafka-topics.sh --create --zookeeper zookeeper:2181 --replication-factor 1 --partitions 1 --topic default
-./bin/kafka-topics.sh --list --zookeeper zookeeper:2181
+1 2 3 4 5
