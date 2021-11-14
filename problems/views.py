@@ -6,6 +6,7 @@ from problems.serializers import TagSerializer, TagSerializerCreateProblem, Prob
 from django.conf import settings
 import os, requests, json
 from problems import middleware
+from cloudinary import uploader
 
 class getTagList(APIView):
     permission_classes = (permissions.AllowAny, )
