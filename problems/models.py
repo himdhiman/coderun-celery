@@ -52,12 +52,12 @@ class Submission(models.Model):
     language = models.CharField(max_length = 50, blank = False)
     code = models.TextField(blank = False)
     status = models.CharField(max_length = 30, default = "Queued")
-    error = models.TextField(null=True, blank = True)
-    test_Cases_Passed = models.IntegerField(null=True, blank = True)
-    total_Test_Cases = models.IntegerField(null=True, blank = True)
-    score = models.IntegerField(null=True, blank = True)
-    total_score = models.IntegerField(null=True, blank = True)
-    submission_Date_Time = models.DateTimeField(auto_now=True, null = True, blank = True)
+    error = models.TextField(null = True, blank = True)
+    test_Cases_Passed = models.IntegerField(null = True, blank = True)
+    total_Test_Cases = models.IntegerField(null = True, blank = True)
+    score = models.IntegerField(null = True, blank = True)
+    total_score = models.IntegerField(null = True, blank = True)
+    submission_Date_Time = models.DateTimeField(auto_now = True, null = True, blank = True)
 
     def __str__(self):
         return str(self.id)
