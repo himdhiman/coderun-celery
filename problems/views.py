@@ -66,6 +66,8 @@ class AddProblem(APIView):
         serializer_obj = ProblemSerializer(data = request_data)
         if serializer_obj.is_valid():
             obj = serializer_obj.save()
+            setattr(obj, "max_score", 100)
+            obj.save()
             return_data = serializer_obj.data
             return_data["id"] = obj.id
             return Response(data = return_data, status = status.HTTP_201_CREATED)
