@@ -7,6 +7,8 @@ from django.conf import settings
 import os, requests, json
 from problems import middleware
 import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 
 class getTagList(APIView):
     permission_classes = (permissions.AllowAny, )
@@ -86,7 +88,6 @@ class UploadTestCases(APIView):
         setattr(problem, "sample_Tc", request.data["custom_test_cases"])
         setattr(problem, "total_Tc", request.data["test_cases"])
         problem.save()
-        cloudinary.config(cloud_name = settings.CLOUDINARY_STORAGE["CLOUD_NAME"], api_key = settings.CLOUDINARY_STORAGE["API_KEY"], api_secret = settings.CLOUDINARY_STORAGE["API_SECRET"])
         for key, value in request.FILES.items():
             cloudinary.uploader.upload(request.FILES[key], resource_type = "auto", public_id = key, folder = f"TestCases/{str(probId)}/")
         return Response(status = status.HTTP_200_OK)

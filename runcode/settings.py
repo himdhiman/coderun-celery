@@ -1,5 +1,8 @@
 from pathlib import Path
 import os
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -18,6 +21,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'cloudinary_storage',
     'django.contrib.staticfiles',
     'corsheaders',
     'django_celery_results',
@@ -25,6 +29,7 @@ INSTALLED_APPS = [
 
     'core',
     'problems',
+    'cloudinary',
 ]
 
 MIDDLEWARE = [
@@ -172,12 +177,7 @@ CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 
 # Cloudinary Settings
 
-CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': 'hhikcz56h',
-    'API_KEY': '538462597997963',
-    'API_SECRET': 'cJfOCiWn0bF6LXTwYZCpUinCJpw',
-}
-
-# DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+cloudinary.config(cloud_name = "hhikcz56h", api_key = "538462597997963", api_secret = "cJfOCiWn0bF6LXTwYZCpUinCJpw", secure = True)
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 
