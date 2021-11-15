@@ -18,7 +18,6 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'cloudinary_storage',
     'django.contrib.staticfiles',
     'corsheaders',
     'django_celery_results',
@@ -26,7 +25,6 @@ INSTALLED_APPS = [
 
     'core',
     'problems',
-    'cloudinary',
 ]
 
 MIDDLEWARE = [
