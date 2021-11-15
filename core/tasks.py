@@ -1,4 +1,4 @@
-import os
+import os, urllib3
 from celery import shared_task
 from problems.serializers import SubmissionSerializer
 from pathlib import Path
@@ -11,6 +11,8 @@ from core.helper import runcode_helper, encode_data, decode_data
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 channel_layer = get_channel_layer()
+http = urllib3.PoolManager()
+BASE_URL = "https://res.cloudinary.com/hhikcz56h/raw/upload/v1636969572/TestCases/"
 
 @shared_task(bind = True)
 def runCode(discarded_arg, context):
@@ -26,8 +28,10 @@ def runCode(discarded_arg, context):
         counter = 0
     
         for i in range(1, totaltc+1):
-            inpPath = os.path.join(BASE_DIR, "media", 'TestCases', str(probId), 'tc-input' + str(i) + '.txt')
-            input_data = open(inpPath, 'r').read()
+            print(body)
+            input_target_url = BASE_URL + str(probId) + "/" + f"tc-input{str(i)}.txt"
+            input_response = http.request('GET', input_target_url)
+            input_data = input_response.data.decode('utf-8')
             data = {
                 "code" : body["code"],
                 "lang" : body["language"],
@@ -38,8 +42,9 @@ def runCode(discarded_arg, context):
                 if result["stdout"]:
                     decoded_stdout = decode_data(result["stdout"])
                     decoded_stdout = decoded_stdout.strip()
-                    outPath = os.path.join(BASE_DIR, "media", 'TestCases', str(probId), 'tc-output' + str(i) + '.txt')
-                    output_data = open(outPath, 'r').read()
+                    output_target_url = BASE_URL + str(probId) + "/" + f"tc-output{str(i)}.txt"
+                    output_response = http.request('GET', output_target_url)
+                    output_data = output_response.data.decode('utf-8')
                     output_data = output_data.strip()
                     if output_data == decoded_stdout:
                         counter += 1
