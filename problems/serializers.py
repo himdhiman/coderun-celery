@@ -22,8 +22,19 @@ class ProblemListSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Problem
         fields = ['id', 'title', 'tags', 'totalSubmissions', 'problem_level']
+
     def to_representation(self, obj):
         primitive_repr = super(ProblemListSerializer, self).to_representation(obj)
+        primitive_repr['solved'] = "Unsolved"
+        return primitive_repr 
+
+class ProblemListStatusSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Problem
+        fields = ['id']
+
+    def to_representation(self, obj):
+        primitive_repr = super(ProblemListStatusSerializer, self).to_representation(obj)
         mail_id = self.context.get("mail_id")
         if mail_id:
             data = models.Submission.objects.filter(problem_Id = obj.id, created_By = mail_id).order_by("-score")
@@ -35,7 +46,7 @@ class ProblemListSerializer(serializers.ModelSerializer):
                     primitive_repr['solved'] = "Attempted"
                 return primitive_repr 
         primitive_repr['solved'] = "Unsolved"
-        return primitive_repr 
+        return primitive_repr
 
 class ProblemSerializer(serializers.ModelSerializer):
     class Meta:

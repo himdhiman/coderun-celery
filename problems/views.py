@@ -2,7 +2,7 @@ from rest_framework import permissions, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from problems.models import Problem, Tag
-from problems.serializers import TagSerializer, TagSerializerCreateProblem, ProblemListSerializer, ProblemSerializer, GetProblemSerializer
+from problems.serializers import TagSerializer, TagSerializerCreateProblem, ProblemListSerializer, ProblemSerializer, GetProblemSerializer, ProblemListStatusSerializer
 from django.conf import settings
 import os, requests, json
 from problems import middleware
@@ -40,17 +40,22 @@ class getProblemsList(APIView):
             data = data.filter(tags__in = tags).distinct()
         if level:
             data = data.filter(problem_level = level).distinct()
-        is_data = False
-        print(request.headers)
+        data = ProblemListSerializer(data, many = True, context = {})
+        return Response(data = data.data, status = status.HTTP_200_OK)
+
+class getProblemsStatus(APIView):
+    permission_classes = (permissions.AllowAny, )
+    def post(self, request):
+        req_data = request.data["data"]
+        data = Problem.objects.filter(id__in = req_data["ids"])
         if request.headers.get('Authorization'):
             access_token = request.headers['Authorization'].split(' ')[1]
             response = middleware.Authentication.isAuthenticated(access_token)
             if response["success"]:
-                data = ProblemListSerializer(data, many = True, context = {'mail_id': response['data']['email']})
-                is_data = True
-        if not is_data:
-            data = ProblemListSerializer(data, many = True, context = {})
-        return Response(data = data.data, status = status.HTTP_200_OK)
+                data = ProblemListStatusSerializer(data, many = True, context = {'mail_id': response['data']['email']})
+                return Response(data = data.data, status = status.HTTP_200_OK) 
+        return Response(data = "Authorization Failed", status = status.HTTP_401_UNAUTHORIZED)
+
 
 
 class AddProblem(APIView):
