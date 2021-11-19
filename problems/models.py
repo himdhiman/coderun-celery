@@ -61,3 +61,13 @@ class Submission(models.Model):
 
     def __str__(self):
         return str(self.id)
+
+
+class UpvotesDownvote(models.Model):
+    mail_Id = models.CharField(max_length = 50, blank = False)
+    upvote = models.TextField(null = True, blank = True)
+    downvote = models.TextField(null = True, blank = True)
+
+    def __str__(self):
+        return str(self.mail_Id)
+
