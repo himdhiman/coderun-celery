@@ -28,7 +28,6 @@ def runCode(discarded_arg, context):
         counter = 0
     
         for i in range(1, totaltc+1):
-            print(body)
             input_target_url = BASE_URL + str(probId) + "/" + f"tc-input{str(i)}.txt"
             input_response = http.request('GET', input_target_url)
             input_data = input_response.data.decode('utf-8')

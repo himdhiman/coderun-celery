@@ -1,4 +1,9 @@
-import requests, json, base64
+import requests, json, base64, urllib3
+from problems.models import Problem
+
+BASE_URL = "https://res.cloudinary.com/hhikcz56h/raw/upload/v1636969572/TestCases/"
+http = urllib3.PoolManager()
+
 
 language_mapping = {
     "C++ 17" : 53,
@@ -24,6 +29,40 @@ def runcode_helper(req_data):
     }
     res = requests.request("POST", url, data = json.dumps(payload), headers = headers, params = querystring)
     return res.json()
+
+
+def runCustomTestCases(req_data):
+    probId = req_data["problem_Id"]
+    prob = Problem.objects.get(id = probId)
+    totaltc = prob.sample_Tc
+    for i in range(1, totaltc+1):
+        input_target_url = BASE_URL + str(probId) + "/" + f"sc-input{str(i)}.txt"
+        input_response = http.request('GET', input_target_url)
+        input_data = input_response.data.decode('utf-8')
+        data = {
+            "code" : req_data["code"],
+            "lang" : req_data["language"],
+            "input" : encode_data(input_data.strip())
+        }
+        result = runcode_helper(data)
+        if result["status"]["description"] == "Accepted":
+            if result["stdout"]:
+                decoded_stdout = decode_data(result["stdout"])
+                decoded_stdout = decoded_stdout.strip()
+                output_target_url = BASE_URL + str(probId) + "/" + f"sc-output{str(i)}.txt"
+                output_response = http.request('GET', output_target_url)
+                output_data = output_response.data.decode('utf-8')
+                output_data = output_data.strip()
+                if output_data != decoded_stdout:
+                    return {"status" : "error", "error" : f"Wrong Ans", "testCase No" : i}
+            else:
+                return {"status" : "error", "error" : f"No Output Generated", "testCase No" : i}
+                
+        else:
+            status = result["status"]["description"]
+            return {"status" : status, "error" : decode_data(result["compile_output"]), "testCase No" : i};
+    return {"status" : "Accepted", "error" : None};
+
 
 def encode_data(message):
     message_bytes = message.encode('ascii')

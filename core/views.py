@@ -5,7 +5,7 @@ from problems import middleware
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from core.helper import runcode_helper
+from core.helper import runcode_helper, runCustomTestCases
 
 class CompileCode(APIView):
     permission_classes = (permissions.AllowAny, )
@@ -20,6 +20,22 @@ class CompileCode(APIView):
                 return Response(status = status.HTTP_401_UNAUTHORIZED)
         data = runcode_helper(request.data)
         return Response(data = data, status = status.HTTP_200_OK)
+
+
+class RunTests(APIView):
+    permission_classes = (permissions.AllowAny, )
+    def post(self, request):
+        headers = request.headers.get("Authorization")
+        if not headers:
+            return Response(status = status.HTTP_401_UNAUTHORIZED)
+        else:
+            access_token = headers.split(' ')[1]
+            response = middleware.Authentication.isAuthenticated(access_token)
+            if not response["success"]:
+                return Response(status = status.HTTP_401_UNAUTHORIZED)
+        data = runCustomTestCases(request.data)
+        return Response(data = data, status = status.HTTP_200_OK)
+
 
 
 class RunCode(APIView):
