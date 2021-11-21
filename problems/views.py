@@ -162,7 +162,7 @@ class GetUpvoteDownvote(APIView):
         if not response["success"]:
             data = {"success" : False, "message" : "Unauthorized Request !"}
             return Response(data = data, status = status.HTTP_401_UNAUTHORIZED)
-        request_data = request.data["data"]
+        request_data = request.data
         request_data["email"] = response['data']['email']
         
         obj = UpvotesDownvote.objects.filter(mail_Id = request_data["email"])
