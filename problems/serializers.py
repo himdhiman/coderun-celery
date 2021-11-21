@@ -1,3 +1,4 @@
+from django.db.models import fields
 from rest_framework import serializers
 from problems import models
 
@@ -76,3 +77,14 @@ class SubmissionSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Submission
         fields = '__all__'
+
+class SubmissionListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Submission
+        fields = [
+            'language',
+            'status',
+            'score',
+            'total_score',
+            'submission_Date_Time'
+        ]

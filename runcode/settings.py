@@ -102,23 +102,23 @@ DATABASES = {
 #     }
 # }
 
-CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "channels_redis.core.RedisChannelLayer",
-        "CONFIG": {
-            "hosts": ["redis://:pa70c1b0adbe58f8dab740372fba1301344cc29e5a315adc0d6ff2f6c4dfc06dc@ec2-54-146-105-205.compute-1.amazonaws.com:24549"],
-        },
-    },
-}
-
 # CHANNEL_LAYERS = {
 #     "default": {
 #         "BACKEND": "channels_redis.core.RedisChannelLayer",
 #         "CONFIG": {
-#             "hosts": [("localhost", 6379)],
+#             "hosts": ["redis://:pa70c1b0adbe58f8dab740372fba1301344cc29e5a315adc0d6ff2f6c4dfc06dc@ec2-54-146-105-205.compute-1.amazonaws.com:24549"],
 #         },
 #     },
 # }
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("localhost", 6379)],
+        },
+    },
+}
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -161,8 +161,8 @@ MEDIA_URL = '/media/'
 
 # Celery Settings
 
-CELERY_BROKER_URL = 'redis://:pa70c1b0adbe58f8dab740372fba1301344cc29e5a315adc0d6ff2f6c4dfc06dc@ec2-54-146-105-205.compute-1.amazonaws.com:24549'
-# CELERY_BROKER_URL = 'redis://localhost:6379'
+# CELERY_BROKER_URL = 'redis://:pa70c1b0adbe58f8dab740372fba1301344cc29e5a315adc0d6ff2f6c4dfc06dc@ec2-54-146-105-205.compute-1.amazonaws.com:24549'
+CELERY_BROKER_URL = 'redis://localhost:6379'
 
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_RESULT_SERIALIZER = 'json'
