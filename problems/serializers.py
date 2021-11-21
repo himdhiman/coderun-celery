@@ -37,7 +37,8 @@ class ProblemListStatusSerializer(serializers.ModelSerializer):
         primitive_repr = super(ProblemListStatusSerializer, self).to_representation(obj)
         mail_id = self.context.get("mail_id")
         if mail_id:
-            data = models.Submission.objects.filter(problem_Id = obj.id, created_By = mail_id).order_by("-score")
+            data = models.Submission.objects.filter(problem_Id = obj.id, 
+                created_By = mail_id).order_by("-score")
             if len(data) > 0:
                 data = data.first()
                 if data.score == data.total_score:
@@ -51,7 +52,19 @@ class ProblemListStatusSerializer(serializers.ModelSerializer):
 class ProblemSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Problem
-        fields = ['created_by', 'title', 'note', 'problem_statement', 'input_format', 'constraints', 'output_format', 'tags', 'problem_level']
+        fields = [
+            'created_by', 
+            'title', 
+            'note', 
+            'problem_statement', 
+            'input_format', 
+            'constraints', 
+            'output_format', 
+            'tags', 
+            'problem_level', 
+            'time_Limit', 
+            'memory_Limit'
+        ]
 
 class GetProblemSerializer(serializers.ModelSerializer):
     tags = TagSerializer(many=True)
