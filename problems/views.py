@@ -145,6 +145,42 @@ class HandleUpvoteDownvote(APIView):
             setattr(vote_object, "downvote", str(list_data))
             vote_object.save()
         return Response(status = status.HTTP_200_OK)
+
+
+class GetUpvoteDownvote(APIView):
+    def convert_to_list(self, data):
+        try:
+            return_data = ast.literal_eval(data)
+        except:
+            qery_list = json.dumps(data)
+            return_data = ast.literal_eval(qery_list)
+        return return_data
+
+    def post(self, request):
+        access_token = request.headers['Authorization'].split(' ')[1]
+        response = middleware.Authentication.isAuthenticated(access_token)
+        if not response["success"]:
+            data = {"success" : False, "message" : "Unauthorized Request !"}
+            return Response(data = data, status = status.HTTP_401_UNAUTHORIZED)
+        request_data = request.data["data"]
+        request_data["email"] = response['data']['email']
+        
+        obj = UpvotesDownvote.objects.filter(mail_Id = request_data["email"])
+        return_data = {"upvote" : False, "downvote" : False}
+        if len(obj) == 0:
+            return Response(data = return_data, status = status.HTTP_200_OK)
+        obj = obj.first()
+        list_data = self.convert_to_list(obj.upvote)
+        if request_data["problem_id"] in list_data:
+            return_data["upvote"] = True
+            return Response(data = return_data, status = status.HTTP_200_OK)
+        list_data = self.convert_to_list(obj.downvote)
+        if request_data["problem_id"] in list_data:
+            return_data["downvote"] = True
+            return Response(data = return_data, status = status.HTTP_200_OK)
+        return Response(data = return_data, status = status.HTTP_200_OK)
+        
+
         
             
         
