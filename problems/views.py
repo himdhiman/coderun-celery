@@ -2,13 +2,20 @@ from rest_framework import permissions, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from problems.models import Problem, Tag, UpvotesDownvote
-from problems.serializers import TagSerializer, TagSerializerCreateProblem, ProblemListSerializer, ProblemSerializer, GetProblemSerializer, ProblemListStatusSerializer
 from django.conf import settings
 import os, requests, json, ast
 from problems import middleware
 import cloudinary
 import cloudinary.uploader
 import cloudinary.api
+from problems.serializers import (
+    TagSerializer, 
+    TagSerializerCreateProblem, 
+    ProblemListSerializer, 
+    ProblemSerializer, 
+    GetProblemSerializer, 
+    ProblemListStatusSerializer
+)
 
 class getTagList(APIView):
     permission_classes = (permissions.AllowAny, )
@@ -52,9 +59,15 @@ class getProblemsStatus(APIView):
             access_token = request.headers['Authorization'].split(' ')[1]
             response = middleware.Authentication.isAuthenticated(access_token)
             if response["success"]:
-                data = ProblemListStatusSerializer(data, many = True, context = {'mail_id': response['data']['email']})
+                data = ProblemListStatusSerializer(
+                    data, many = True, 
+                    context = {'mail_id': response['data']['email']}
+                )
                 return Response(data = data.data, status = status.HTTP_200_OK) 
-        return Response(data = "Authorization Failed", status = status.HTTP_401_UNAUTHORIZED)
+        return Response(
+            data = "Authorization Failed", 
+            status = status.HTTP_401_UNAUTHORIZED
+        )
 
 
 
@@ -96,7 +109,11 @@ class UploadTestCases(APIView):
         setattr(problem, "total_Tc", request.data["test_cases"])
         problem.save()
         for key, value in request.FILES.items():
-            cloudinary.uploader.upload(request.FILES[key], resource_type = "auto", public_id = key, folder = f"TestCases/{str(probId)}/")
+            cloudinary.uploader.upload(
+                request.FILES[key], 
+                resource_type = "auto", 
+                public_id = key, folder = f"TestCases/{str(probId)}/"
+            )
         return Response(status = status.HTTP_200_OK)
 
 
@@ -125,7 +142,11 @@ class HandleUpvoteDownvote(APIView):
 
         obj = UpvotesDownvote.objects.filter(mail_Id = request_data["email"])
         if len(obj) == 0:
-            vote_object = UpvotesDownvote(mail_Id = request_data["email"], upvote = "[]", downvote = "[]")
+            vote_object = UpvotesDownvote(
+                mail_Id = request_data["email"], 
+                upvote = "[]", 
+                downvote = "[]"
+            )
             vote_object.save()
         else:
             vote_object = obj.first()
