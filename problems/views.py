@@ -68,7 +68,6 @@ class AddProblem(APIView):
             return Response(data = data, status = status.HTTP_401_UNAUTHORIZED)
         request_data = request.data["data"]
         request_data["created_by"] = response['data']['email']
-        request_data["memory_Limit"] = 1024*request_data["memory_Limit"]
         serializer_obj = ProblemSerializer(data = request_data)
         if serializer_obj.is_valid():
             obj = serializer_obj.save()

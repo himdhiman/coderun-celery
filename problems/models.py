@@ -27,7 +27,7 @@ class Problem(models.Model):
     sample_Tc = models.IntegerField(default = 0)
     total_Tc = models.IntegerField(default = 0)
     created_At = models.DateField(auto_now = True)
-    memory_Limit = models.IntegerField(null = True, blank = True, default = 5120)
+    memory_Limit = models.IntegerField(null = True, blank = True, default = 1)
     time_Limit = models.IntegerField(null = True, blank = True, default = 1)
     publically_visible = models.BooleanField(default = True)
     approved_by_admin = models.BooleanField(default = False)
