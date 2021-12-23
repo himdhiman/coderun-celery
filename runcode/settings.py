@@ -106,7 +106,7 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": ["redis://:p389b394da7eed29b55227290cb27470e9994063c0f10cd8b7fb434a7bf42bf08@ec2-54-205-172-146.compute-1.amazonaws.com:16240"],
+            "hosts": ["redis://:dPpnlozbZyVtoWAqlMOOFxZ8RvNxNPbp@redis-12814.c15.us-east-1-4.ec2.cloud.redislabs.com:12814"],
         },
     },
 }
@@ -161,7 +161,7 @@ MEDIA_URL = '/media/'
 
 # Celery Settings
 
-CELERY_BROKER_URL = 'redis://:p389b394da7eed29b55227290cb27470e9994063c0f10cd8b7fb434a7bf42bf08@ec2-54-205-172-146.compute-1.amazonaws.com:16240'
+CELERY_BROKER_URL = 'redis://:dPpnlozbZyVtoWAqlMOOFxZ8RvNxNPbp@redis-12814.c15.us-east-1-4.ec2.cloud.redislabs.com:12814'
 # CELERY_BROKER_URL = 'redis://localhost:6379'
 
 CELERY_ACCEPT_CONTENT = ['application/json']
