@@ -1,7 +1,7 @@
 from rest_framework import permissions, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from problems.models import Problem, Submission, Tag, UpvotesDownvote
+from problems.models import Problem, Submission, Tag, UpvotesDownvote, Bookmark
 from django.conf import settings
 import os, requests, json, ast
 from problems import middleware
@@ -233,10 +233,40 @@ class GetSubmissionsList(APIView):
         return Response(data = return_data.data, status = status.HTTP_200_OK)
 
 
-
-
+class HandleBookmark(APIView):
+    permission_classes = (permissions.AllowAny, )
+    def convert_to_list(self, data):
+        try:
+            return_data = ast.literal_eval(data)
+        except:
+            qery_list = json.dumps(data)
+            return_data = ast.literal_eval(qery_list)
+        return return_data
         
-
+    def post(self, request):
+        access_token = request.headers['Authorization'].split(' ')[1]
+        response = middleware.Authentication.isAuthenticated(access_token)
+        if not response["success"]:
+            data = {"success" : False, "message" : "Unauthorized Request !"}
+            return Response(data = data, status = status.HTTP_401_UNAUTHORIZED)
+        request_data = request.data
+        request_data["email"] = response['data']['email']
+        
+        obj = Bookmark.objects.filter(user = request_data["email"])
+        if len(obj) == 0:
+            bookmark_object = Bookmark(
+                user = request_data["email"], 
+                data = "[]"
+            )
+            bookmark_object.save()
+        else:
+            bookmark_object = obj.first()
+        list_data = self.convert_to_list(bookmark_object.data)
+        if request_data["problem_id"] in list_data:
+            list_data.remove(request_data["problem_id"])
+        else:
+            list_data.append(request_data["problem_id"])
+        return Response(status = status.HTTP_200_OK)
         
             
         
