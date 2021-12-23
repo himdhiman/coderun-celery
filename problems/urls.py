@@ -13,7 +13,8 @@ urlpatterns = [
     path('uploadTC/', views.UploadTestCases.as_view()),
     path("handleupvotedownvote/", views.HandleUpvoteDownvote.as_view()),
     path("getupvotedownvote/", views.GetUpvoteDownvote.as_view()),
-    path("getsubmissionslist/", views.GetSubmissionsList.as_view())
+    path("getsubmissionslist/", views.GetSubmissionsList.as_view()),
+    path("handlebookmark/", views.HandleBookmark.as_view())
 
     
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
