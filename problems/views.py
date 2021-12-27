@@ -199,9 +199,15 @@ class GetProblemPageData(APIView):
         request_data["email"] = response['data']['email']
         
         obj = UpvotesDownvote.objects.filter(mail_Id = request_data["email"])
-        return_data = {"upvote" : False, "downvote" : False, "bookmarked" : False}
+        return_data = {"upvote" : False, "downvote" : False, "bookmarked" : False, "submissions" : 0}
+        submission_data = Submission.objects.filter(
+            created_By = request_data["email"], 
+            problem_Id = request_data["problem_id"]
+        )
+        if len(submission_data) > 0:
+            return_data["submissions"] = len(submission_data)
         bookmark_obj = Bookmark.objects.filter(user = request_data["email"])
-        if len(obj) != 0:
+        if len(bookmark_obj) != 0:
             bookmark_obj = bookmark_obj.first()
             bookmark_list = self.convert_to_list(bookmark_obj.data)
             if request_data["problem_id"] in bookmark_list:
