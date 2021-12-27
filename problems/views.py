@@ -179,7 +179,7 @@ class HandleUpvoteDownvote(APIView):
         return Response(status = status.HTTP_200_OK)
 
 
-class GetUpvoteDownvote(APIView):
+class GetProblemPageData(APIView):
     permission_classes = (permissions.AllowAny, )
     def convert_to_list(self, data):
         try:
@@ -199,7 +199,13 @@ class GetUpvoteDownvote(APIView):
         request_data["email"] = response['data']['email']
         
         obj = UpvotesDownvote.objects.filter(mail_Id = request_data["email"])
-        return_data = {"upvote" : False, "downvote" : False}
+        return_data = {"upvote" : False, "downvote" : False, "bookmarked" : False}
+        bookmark_obj = Bookmark.objects.filter(user = request_data["email"])
+        if len(obj) != 0:
+            bookmark_obj = bookmark_obj.first()
+            bookmark_list = self.convert_to_list(bookmark_obj.data)
+            if request_data["problem_id"] in bookmark_list:
+                return_data[bookmark_list] = True      
         if len(obj) == 0:
             return Response(data = return_data, status = status.HTTP_200_OK)
         obj = obj.first()
