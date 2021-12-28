@@ -278,6 +278,8 @@ class HandleBookmark(APIView):
             list_data.remove(request_data["problem_id"])
         else:
             list_data.append(request_data["problem_id"])
+        setattr(obj, "data", "list_data")
+        bookmark_object.save()
         return Response(status = status.HTTP_200_OK)
         
             
