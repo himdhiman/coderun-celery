@@ -211,7 +211,7 @@ class GetProblemPageData(APIView):
             bookmark_obj = bookmark_obj.first()
             bookmark_list = self.convert_to_list(bookmark_obj.data)
             if request_data["problem_id"] in bookmark_list:
-                return_data[bookmark_list] = True      
+                return_data["bookmarked"] = True      
         if len(obj) == 0:
             return Response(data = return_data, status = status.HTTP_200_OK)
         obj = obj.first()
@@ -265,6 +265,7 @@ class HandleBookmark(APIView):
         request_data["email"] = response['data']['email']
         
         obj = Bookmark.objects.filter(user = request_data["email"])
+        print(obj)
         if len(obj) == 0:
             bookmark_object = Bookmark(
                 user = request_data["email"], 
@@ -278,7 +279,7 @@ class HandleBookmark(APIView):
             list_data.remove(request_data["problem_id"])
         else:
             list_data.append(request_data["problem_id"])
-        setattr(obj, "data", "list_data")
+        setattr(bookmark_object, "data", list_data)
         bookmark_object.save()
         return Response(status = status.HTTP_200_OK)
         
