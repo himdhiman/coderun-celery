@@ -241,7 +241,7 @@ class GetSubmissionsList(APIView):
         data = Submission.objects.filter(
             created_By = request_data["email"], 
             problem_Id = request_data["problem_id"]
-        )
+        ).order_by("-submission_Date_Time")
         return_data = SubmissionListSerializer(data, many = True)
         return Response(data = return_data.data, status = status.HTTP_200_OK)
 
