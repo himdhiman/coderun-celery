@@ -6,4 +6,5 @@ admin.site.register(models.Bookmark)
 admin.site.register(models.Problem)
 admin.site.register(models.Submission)
 admin.site.register(models.UpvotesDownvote)
+admin.site.register(models.Editorial)
 
