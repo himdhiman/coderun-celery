@@ -26,7 +26,6 @@ def runCode(discarded_arg, context):
         prob = Problem.objects.get(id = probId)
         totaltc = prob.total_Tc
         counter = 0
-        temp_result = "Accepted"
     
         for i in range(1, totaltc+1):
             input_target_url = BASE_URL + str(probId) + "/" + f"tc-input{str(i)}.txt"
@@ -57,7 +56,6 @@ def runCode(discarded_arg, context):
                     async_to_sync(channel_layer.group_send)("user_" + context["uid"], {'type': 'sendResult', 'text' : "Wrong Ans"})
             else:
                 status = result["status"]["description"]
-                temp_result = status + " - " + str(counter + 1)
                 setattr(inst, "error", decode_data(result["compile_output"]))
                 setattr(inst, "status", status)
                 inst.save()
@@ -66,8 +64,6 @@ def runCode(discarded_arg, context):
                 break
         if counter == totaltc:
             setattr(inst, "status", "Accepted")
-        else:
-            setattr(inst, "status", temp_result)
         setattr(inst, "test_Cases_Passed", counter)
         setattr(inst, "total_Test_Cases", totaltc)
         setattr(inst, "score", int((counter/totaltc))*prob.max_score)
