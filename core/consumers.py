@@ -20,7 +20,7 @@ class CodeRunConsumer(AsyncWebsocketConsumer):
         # else:
         #     await self.send(json.dumps({"text" : "failed"}))
         # print("called")
-        await self.send(json.dumps({"text" : state}))
+        await self.send(json.dumps({"text" : state + "-" + currTc}))
 
         # if(currTc == totTc):
         #     await self.close()
