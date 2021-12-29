@@ -71,3 +71,16 @@ class UpvotesDownvote(models.Model):
     def __str__(self):
         return str(self.mail_Id)
 
+
+class Editorial(models.Model):
+    problem_Id = models.IntegerField(null = True, blank = True)
+    cpp17 = models.TextField(null = True, blank = True)
+    java = models.TextField(null = True, blank = True)
+    python2 = models.TextField(null = True, blank = True)
+    python3 = models.TextField(null = True, blank = True)
+    cpp14 = models.TextField(null = True, blank = True)
+    c = models.TextField(null = True, blank = True)
+
+    def __str__(self):
+        return str(self.problem_Id)
+
