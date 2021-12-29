@@ -15,6 +15,7 @@ urlpatterns = [
     path("getsubmissionslist/", views.GetSubmissionsList.as_view()),
     path("handlebookmark/", views.HandleBookmark.as_view()),
     path("getProblemPageData/", views.GetProblemPageData.as_view()),
+    path('getEditorial/', views.GetEditorial.as_view()),
 
     
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
