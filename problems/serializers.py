@@ -88,3 +88,10 @@ class SubmissionListSerializer(serializers.ModelSerializer):
             'total_score',
             'submission_Date_Time'
         ]
+
+
+class EditorialSerializer(serializers.ModelSerializer):
+    id = serializers.ReadOnlyField()
+    class Meta:
+        model = models.Editorial
+        fields = '__all__'

@@ -1,7 +1,7 @@
 from rest_framework import permissions, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from problems.models import Problem, Submission, Tag, UpvotesDownvote, Bookmark
+from problems.models import Problem, Submission, Tag, UpvotesDownvote, Bookmark, Editorial
 from django.conf import settings
 import os, requests, json, ast
 from problems import middleware
@@ -15,7 +15,8 @@ from problems.serializers import (
     ProblemSerializer, 
     GetProblemSerializer, 
     ProblemListStatusSerializer,
-    SubmissionListSerializer
+    SubmissionListSerializer,
+    EditorialSerializer
 )
 
 class getTagList(APIView):
@@ -282,6 +283,18 @@ class HandleBookmark(APIView):
         setattr(bookmark_object, "data", list_data)
         bookmark_object.save()
         return Response(status = status.HTTP_200_OK)
+
+
+class GetEditorial(APIView):
+    permission_classes = (permissions.AllowAny, )
+
+    def post(self, request):
+        data = Editorial.objects.filter(problem_Id = request.data["problem_id"])
+        if len(data) > 0:
+            data = EditorialSerializer(data.first());
+            return Response(data = data.data, status = status.HTTP_200_OK)
+        else:
+            return Response(data = "No Editorial Available", status = status.HTTP_200_OK)
         
             
         
