@@ -57,7 +57,7 @@ def runCode(discarded_arg, context):
                     async_to_sync(channel_layer.group_send)("user_" + context["uid"], {'type': 'sendResult', 'text' : "Wrong Ans"})
             else:
                 status = result["status"]["description"]
-                temp_result = status
+                temp_result = status + " - " + str(counter + 1)
                 setattr(inst, "error", decode_data(result["compile_output"]))
                 setattr(inst, "status", status)
                 inst.save()
