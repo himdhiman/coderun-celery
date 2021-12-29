@@ -15,15 +15,7 @@ class CodeRunConsumer(AsyncWebsocketConsumer):
         state = lst[0]
         currTc = lst[1]
         totTc = lst[2]
-        # if(state == "1"):
-        #     await self.send(json.dumps({"text" : "passed"}))
-        # else:
-        #     await self.send(json.dumps({"text" : "failed"}))
-        # print("called")
         await self.send(json.dumps({"text" : state + "-" + currTc}))
-
-        # if(currTc == totTc):
-        #     await self.close()
 
     async def sendResult(self, event):
         await self.send(json.dumps({"text" : event['text']}))
