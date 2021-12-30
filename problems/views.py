@@ -39,7 +39,7 @@ class getTagListCreateProblem(APIView):
 
 class getProblemsList(APIView):
     permission_classes = (permissions.AllowAny, )
-    def post(self, request):
+    def get(self, request):
         req_data = request.data
         tags = req_data.get("tags")
         level = req_data.get("level")
@@ -97,8 +97,8 @@ class AddProblem(APIView):
 
 class GetProblem(APIView):
     permission_classes = (permissions.AllowAny, )
-    def post(self, request):
-        prob_obj = Problem.objects.get(id = request.data["id"])
+    def get(self, request, id):
+        prob_obj = Problem.objects.get(id = id)
         data = GetProblemSerializer(prob_obj)
         return Response(data = data.data, status = status.HTTP_200_OK)
 
@@ -190,13 +190,14 @@ class GetProblemPageData(APIView):
             return_data = ast.literal_eval(qery_list)
         return return_data
 
-    def post(self, request):
+    def get(self, request, id):
         access_token = request.headers['Authorization'].split(' ')[1]
         response = middleware.Authentication.isAuthenticated(access_token)
         if not response["success"]:
             data = {"success" : False, "message" : "Unauthorized Request !"}
             return Response(data = data, status = status.HTTP_401_UNAUTHORIZED)
         request_data = request.data
+        request_data["problem_id"] = id
         request_data["email"] = response['data']['email']
         
         obj = UpvotesDownvote.objects.filter(mail_Id = request_data["email"])
@@ -229,13 +230,14 @@ class GetProblemPageData(APIView):
 
 class GetSubmissionsList(APIView):
     permission_classes = (permissions.AllowAny, )
-    def post(self, request):
+    def get(self, request, id):
         access_token = request.headers['Authorization'].split(' ')[1]
         response = middleware.Authentication.isAuthenticated(access_token)
         if not response["success"]:
             data = {"success" : False, "message" : "Unauthorized Request !"}
             return Response(data = data, status = status.HTTP_401_UNAUTHORIZED)
         request_data = request.data
+        request_data["problem_id"] = id
         request_data["email"] = response['data']['email']
 
         data = Submission.objects.filter(
