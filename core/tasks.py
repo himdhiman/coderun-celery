@@ -15,7 +15,8 @@ http = urllib3.PoolManager()
 BASE_URL = "https://res.cloudinary.com/hhikcz56h/raw/upload/v1636969572/TestCases/"
 
 @shared_task(bind = True)
-def runCode(discarded_arg, context):
+def runCode(self, context):
+    print(self.request.id)
     body = context["body"]
     response = SubmissionSerializer(data = body)
     if(response.is_valid()):
