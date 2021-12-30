@@ -60,8 +60,9 @@ def runCode(discarded_arg, context):
                     setattr(inst, "error", decode_data(result["compile_output"]))
                 setattr(inst, "status", status)
                 inst.save()
+                response = Submission.objects.filter(id = inst.id)
                 async_to_sync(channel_layer.group_send)("user_" + str(context["uid"]), {'type': 'sendStatus', 'text' : f"{status}/{i}/{totaltc}"})
-                async_to_sync(channel_layer.group_send)("user_" + context["uid"], {'type': 'sendResult', 'text' : status})
+                async_to_sync(channel_layer.group_send)("user_" + context["uid"], {'type': 'sendResult', 'text' : djSerializer.serialize('json', response)})
                 break
         if counter == totaltc:
             setattr(inst, "status", "Accepted")

@@ -60,7 +60,10 @@ def runCustomTestCases(req_data):
                 
         else:
             status = result["status"]["description"]
-            return {"status" : status, "error" : decode_data(result["compile_output"]), "testCase No" : i};
+            if result["compile_output"]:
+                return {"status" : status, "error" : decode_data(result["compile_output"]), "testCase No" : i}
+            else:
+                return {"status" : status, "error" : None, "testCase No" : i}
     return {"status" : "Accepted", "error" : None};
 
 
