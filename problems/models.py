@@ -50,6 +50,7 @@ class Submission(models.Model):
     created_By = models.CharField(max_length = 50, blank = False)
     problem_Id = models.IntegerField(blank = False)
     language = models.CharField(max_length = 50, blank = False)
+    task_id = models.TextField(null = True, blank = True)
     code = models.TextField(blank = False)
     status = models.CharField(max_length = 30, default = "Queued")
     error = models.TextField(null = True, blank = True)

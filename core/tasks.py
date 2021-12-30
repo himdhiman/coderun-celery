@@ -16,12 +16,12 @@ BASE_URL = "https://res.cloudinary.com/hhikcz56h/raw/upload/v1636969572/TestCase
 
 @shared_task(bind = True)
 def runCode(self, context):
-    print(self.request.id)
     body = context["body"]
     response = SubmissionSerializer(data = body)
     if(response.is_valid()):
         inst = response.save()
         setattr(inst, "status", "Running")
+        setattr(inst, "task_id", self.request.id)
         inst.save()
         probId = body["problem_Id"]
         prob = Problem.objects.get(id = probId)
