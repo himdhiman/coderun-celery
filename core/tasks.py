@@ -50,22 +50,44 @@ def runCode(discarded_arg, context):
                         async_to_sync(channel_layer.group_send)("user_" + str(context["uid"]), {'type': 'sendStatus', 'text' : f"Passed/{i}/{totaltc}"})
                     else:
                         async_to_sync(channel_layer.group_send)("user_" + str(context["uid"]), {'type': 'sendStatus', 'text' : f"Wrong Answer/{i}/{totaltc}"})
+                        setattr(inst, "status", "Wrong Answer")
+                        setattr(inst, "test_Cases_Passed", counter)
+                        setattr(inst, "total_Test_Cases", totaltc)
+                        setattr(inst, "score", int((counter/totaltc))*prob.max_score)
+                        setattr(inst, "total_score", prob.max_score)
+                        inst.save()
+                        response = Submission.objects.filter(id = inst.id)
+                        async_to_sync(channel_layer.group_send)("user_" + context["uid"], {'type': 'sendResult', 'text' : djSerializer.serialize('json', response)})
+                        return
                 else:
+                    async_to_sync(channel_layer.group_send)("user_" + context["uid"], {'type': 'sendStatus', 'text' : f"Wrong Answer/{i}/{totaltc}"})
                     setattr(inst, "status", "Wrong Answer")
+                    setattr(inst, "test_Cases_Passed", counter)
+                    setattr(inst, "total_Test_Cases", totaltc)
+                    setattr(inst, "score", int((counter/totaltc))*prob.max_score)
+                    setattr(inst, "total_score", prob.max_score)
                     inst.save()
-                    async_to_sync(channel_layer.group_send)("user_" + context["uid"], {'type': 'sendResult', 'text' : "Wrong Ans"})
+                    response = Submission.objects.filter(id = inst.id)
+                    async_to_sync(channel_layer.group_send)("user_" + context["uid"], {'type': 'sendResult', 'text' : djSerializer.serialize('json', response)})
+                    return
             else:
                 status = result["status"]["description"]
+                async_to_sync(channel_layer.group_send)("user_" + str(context["uid"]), {'type': 'sendStatus', 'text' : f"{status}/{i}/{totaltc}"})
                 if result["compile_output"]:
                     setattr(inst, "error", decode_data(result["compile_output"]))
                 setattr(inst, "status", status)
+                setattr(inst, "test_Cases_Passed", counter)
+                setattr(inst, "total_Test_Cases", totaltc)
+                setattr(inst, "score", int((counter/totaltc))*prob.max_score)
+                setattr(inst, "total_score", prob.max_score)
                 inst.save()
                 response = Submission.objects.filter(id = inst.id)
-                async_to_sync(channel_layer.group_send)("user_" + str(context["uid"]), {'type': 'sendStatus', 'text' : f"{status}/{i}/{totaltc}"})
                 async_to_sync(channel_layer.group_send)("user_" + context["uid"], {'type': 'sendResult', 'text' : djSerializer.serialize('json', response)})
-                break
+                return
         if counter == totaltc:
             setattr(inst, "status", "Accepted")
+        else:
+            setattr(inst, "status", "Error not defined")
         setattr(inst, "test_Cases_Passed", counter)
         setattr(inst, "total_Test_Cases", totaltc)
         setattr(inst, "score", int((counter/totaltc))*prob.max_score)
@@ -73,4 +95,4 @@ def runCode(discarded_arg, context):
         inst.save()
         response = Submission.objects.filter(id = inst.id)
         async_to_sync(channel_layer.group_send)("user_" + context["uid"], {'type': 'sendResult', 'text' : djSerializer.serialize('json', response)})
-        async_to_sync(channel_layer.group_send)("user_" + context["uid"], {'type': 'sendResult', 'text' : "Completed"})
+        return
