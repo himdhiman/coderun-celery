@@ -15,8 +15,8 @@ class CodeRunConsumer(AsyncWebsocketConsumer):
         state = lst[0]
         currTc = lst[1]
         totTc = lst[2]
-        await self.send(json.dumps({"text" : state + "-" + currTc}))
+        await self.send(json.dumps({"text" : state + "-" + currTc, "is_testcase" : True}))
 
     async def sendResult(self, event):
-        await self.send(json.dumps({"text" : event['text']}))
+        await self.send(json.dumps({"text" : event['text'], "is_testcase" : False}))
         await self.close()
