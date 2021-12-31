@@ -6,6 +6,7 @@ from problems.models import Problem, Submission
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 from django.core import serializers as djSerializer
+from django.db.models import F
 from problems import middleware
 from core.helper import runcode_helper, encode_data, decode_data
 
@@ -93,7 +94,15 @@ def runCode(self, context):
         setattr(inst, "total_Test_Cases", totaltc)
         setattr(inst, "score", int((counter/totaltc))*prob.max_score)
         setattr(inst, "total_score", prob.max_score)
+        prev_submissions = Submission.objects.filter(created_By = inst.created_By, problem_Id = inst.problem_Id, score = F('total_score'))
         inst.save()
         response = Submission.objects.filter(id = inst.id)
-        async_to_sync(channel_layer.group_send)("user_" + context["uid"], {'type': 'sendResult', 'text' : djSerializer.serialize('json', response)})
+        if len(prev_submissions) == 0:
+            prob_obj = Problem.objects.get(id = inst.problem_Id)
+            prob_obj.totalSubmissions = prob_obj.totalSubmissions + 1;
+            prob_obj.save()
+            async_to_sync(channel_layer.group_send)("user_" + str(context["uid"]), {'type': 'sendStatus', 'text' : "inc_submissions/none/none"})
+            async_to_sync(channel_layer.group_send)("user_" + context["uid"], {'type': 'sendResult', 'text' : djSerializer.serialize('json', response)})
+        else:
+            async_to_sync(channel_layer.group_send)("user_" + context["uid"], {'type': 'sendResult', 'text' : djSerializer.serialize('json', response)})
         return
