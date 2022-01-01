@@ -6,8 +6,7 @@ http = urllib3.PoolManager()
 
 
 language_mapping = {
-    "C++ 17" : 53,
-    "C++ 14" : 52,
+    "C++" : 53,
     "C" : 48,
     "Java" : 26,
     "Python 2" : 36,
