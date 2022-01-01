@@ -41,7 +41,7 @@ class ProblemAdmin(admin.ModelAdmin):
 
 
 class SavedCodeAdmin(admin.ModelAdmin):
-    exclude = ("code", )
+    list_display = ("created_By", "problem_Id", "language", "submission_Date_Time", )
 
 admin.site.register(models.Tag)
 admin.site.register(models.Bookmark)
