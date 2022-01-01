@@ -85,3 +85,14 @@ class Editorial(models.Model):
     def __str__(self):
         return str(self.problem_Id)
 
+
+class SavedCode(models.Model):
+    created_By = models.CharField(max_length = 50, blank = False)
+    problem_Id = models.IntegerField(null = True, blank = True)
+    code = models.TextField(null = True, blank = True)
+    language = models.CharField(max_length = 50, blank = False)
+    submission_Date_Time = models.DateTimeField(auto_now = True, null = True, blank = True)
+
+    def __str__(self):
+        return self.created_By
+

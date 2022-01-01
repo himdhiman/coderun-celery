@@ -40,10 +40,14 @@ class ProblemAdmin(admin.ModelAdmin):
     list_display = ("id", "title", "created_by", "problem_level", "approved_by_admin", )
 
 
+class SavedCodeAdmin(admin.ModelAdmin):
+    exclude = ("code", )
+
 admin.site.register(models.Tag)
 admin.site.register(models.Bookmark)
 admin.site.register(models.Problem, ProblemAdmin)
 admin.site.register(models.Submission, submissionAdmin)
 admin.site.register(models.UpvotesDownvote)
 admin.site.register(models.Editorial, editorialAdmin)
+admin.site.register(models.SavedCode, SavedCodeAdmin)
 
