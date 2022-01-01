@@ -1,6 +1,7 @@
 from django.db.models import fields
 from rest_framework import serializers
 from problems import models
+from core.helper import decode_data
 
 class TagSerializer(serializers.ModelSerializer):
     id = serializers.ReadOnlyField()
@@ -95,3 +96,15 @@ class EditorialSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Editorial
         fields = '__all__'
+
+
+
+class SavedCodeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.SavedCode
+        fields = ["code", "language", "submission_Date_Time"]
+
+    def to_representation(self, obj):
+        primitive_repr = super(SavedCodeSerializer, self).to_representation(obj)
+        primitive_repr['code'] = decode_data(obj.code)
+        return primitive_repr

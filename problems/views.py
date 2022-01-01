@@ -1,7 +1,15 @@
 from rest_framework import permissions, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from problems.models import Problem, Submission, Tag, UpvotesDownvote, Bookmark, Editorial
+from problems.models import (
+    Problem, 
+    Submission, 
+    Tag, 
+    UpvotesDownvote, 
+    Bookmark, 
+    Editorial, 
+    SavedCode
+)
 from django.conf import settings
 import os, requests, json, ast
 from problems import middleware
@@ -16,8 +24,11 @@ from problems.serializers import (
     GetProblemSerializer, 
     ProblemListStatusSerializer,
     SubmissionListSerializer,
-    EditorialSerializer
+    EditorialSerializer,
+    SavedCodeSerializer
 )
+from datetime import datetime
+from core.helper import encode_data, decode_data
 
 class getTagList(APIView):
     permission_classes = (permissions.AllowAny, )
@@ -299,5 +310,61 @@ class GetEditorial(APIView):
             return Response(data = "No Editorial Available", status = status.HTTP_200_OK)
         
             
+
+class SaveCodeCloud(APIView):
+    permissions = (permissions.AllowAny, )
+
+    def post(self, request):
+        access_token = request.headers['Authorization'].split(' ')[1]
+        response = middleware.Authentication.isAuthenticated(access_token)
+        if not response["success"]:
+            data = {"success" : False, "message" : "Unauthorized Request !"}
+            return Response(data = data, status = status.HTTP_401_UNAUTHORIZED)
+        request_data = request.data
+        request_data["email"] = response['data']['email']
+
+        obj = SavedCode.objects.filter(
+            problem_Id = request_data["probId"], 
+            created_By = request_data["email"]
+        )
+        if len(obj) > 0:
+            obj = obj.first()
+            setattr(obj, "code", encode_data(request_data["code"]))
+            setattr(obj, "language", request_data["language"])
+            setattr(obj, "submission_Date_Time", datetime.now())
+            obj.save();
+        else:
+            SavedCode.objects.create(
+                problem_Id = request_data["probId"], 
+                created_By = request_data["email"],
+                code = encode_data(request_data["code"]),
+                language = request_data["language"]
+            )
+        return Response(status = status.HTTP_200_OK)
+
+class GetsavedCode(APIView):
+    permissions = (permissions.AllowAny, )
+
+    def get(self, request, id):
+        access_token = request.headers['Authorization'].split(' ')[1]
+        response = middleware.Authentication.isAuthenticated(access_token)
+        if not response["success"]:
+            data = {"success" : False, "message" : "Unauthorized Request !"}
+            return Response(data = data, status = status.HTTP_401_UNAUTHORIZED)
+        request_data = request.data
+        request_data["problem_id"] = id
+        request_data["email"] = response['data']['email']
+
+        obj = SavedCode.objects.filter(
+            problem_Id = request_data["problem_id"], 
+            created_By = request_data["email"]
+        )
+        data = SavedCodeSerializer(obj, many = True)
+        return Response(data = data.data, status = status.HTTP_200_OK)
+
+
+
+
+
         
 
