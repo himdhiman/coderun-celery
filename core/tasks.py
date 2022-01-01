@@ -77,6 +77,8 @@ def runCode(self, context):
                 async_to_sync(channel_layer.group_send)("user_" + str(context["uid"]), {'type': 'sendStatus', 'text' : f"{status}/{i}/{totaltc}"})
                 if result["compile_output"]:
                     setattr(inst, "error", decode_data(result["compile_output"]))
+                if result["stderr"]:
+                    setattr(inst, "error", decode_data(result["stderr"]))
                 setattr(inst, "status", status)
                 setattr(inst, "test_Cases_Passed", counter)
                 setattr(inst, "total_Test_Cases", totaltc)
