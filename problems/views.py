@@ -150,8 +150,6 @@ class HandleUpvoteDownvote(APIView):
         request_data = request.data["data"]
         request_data["email"] = response['data']['email']
         
-        # request_data = request.data
-        # request_data["email"] = "server@gmail.com"
         problem_obj = Problem.objects.get(id = request_data["problem_id"])
 
         obj = UpvotesDownvote.objects.filter(mail_Id = request_data["email"])
@@ -176,7 +174,30 @@ class HandleUpvoteDownvote(APIView):
                 list_data.append(request_data["problem_id"])
             setattr(vote_object, "upvote", str(list_data))
             vote_object.save()
+        elif request_data["type"] == "downvote":
+            list_data = self.convert_to_list(vote_object.downvote)
+            if request_data["problem_id"] in list_data:
+                problem_obj.down_votes -= 1
+                problem_obj.save()
+                list_data.remove(request_data["problem_id"])
+            else:
+                problem_obj.down_votes += 1
+                problem_obj.save()
+                list_data.append(request_data["problem_id"])
+            setattr(vote_object, "downvote", str(list_data))
+            vote_object.save()
         else:
+            list_data = self.convert_to_list(vote_object.upvote)
+            if request_data["problem_id"] in list_data:
+                problem_obj.up_votes -= 1
+                problem_obj.save()
+                list_data.remove(request_data["problem_id"])
+            else:
+                problem_obj.up_votes += 1
+                problem_obj.save()
+                list_data.append(request_data["problem_id"])
+            setattr(vote_object, "upvote", str(list_data))
+            vote_object.save()
             list_data = self.convert_to_list(vote_object.downvote)
             if request_data["problem_id"] in list_data:
                 problem_obj.down_votes -= 1
