@@ -95,6 +95,7 @@ def runCode(self, context):
         else:
             setattr(inst, "status", "Error not defined")
         prev_submissions = Submission.objects.filter(created_By = inst.created_By, problem_Id = inst.problem_Id, score = F('score'))
+        print(prev_submissions)
         setattr(inst, "test_Cases_Passed", counter)
         setattr(inst, "total_Test_Cases", totaltc)
         setattr(inst, "score", int((counter/totaltc))*prob.max_score)
