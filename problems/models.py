@@ -1,6 +1,8 @@
 from django.db import models
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
+import requests
+from django.conf import settings
 
 class Tag(models.Model):
     name = models.CharField(max_length = 20, unique=True)
@@ -102,7 +104,27 @@ class SavedCode(models.Model):
 @receiver(pre_save, sender = Problem)
 def before_saving_problem(sender, instance, *args, **kwargs):
     if not instance.id:
-        print("New Object")
         pass
-    else:
-        print(instance.id)
+    curr_instance = Problem.objects.get(id = instance.id)
+    send_data = {}
+
+    if curr_instance.problem_level == "E":
+        send_data["field"] = "easy"
+    elif curr_instance.problem_level == "M":
+        send_data["field"] = "medium"
+    elif curr_instance.problem_level == "H":
+        send_data["field"] = "hard"
+
+    if curr_instance.approved_by_admin == False and instance.approved_by_admin:
+        send_data["type"] = "increase"
+        requests.post(
+            settings.AUTH_SERVER_URL + "auth/setFixedData/", 
+            data = send_data
+        )
+    elif curr_instance.approved_by_admin and instance.approved_by_admin == False:
+        send_data["type"] = "decrease"
+        requests.post(
+            settings.AUTH_SERVER_URL + "auth/setFixedData/", 
+            data = send_data
+        )
+    return

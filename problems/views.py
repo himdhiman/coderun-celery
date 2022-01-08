@@ -10,8 +10,7 @@ from problems.models import (
     Editorial, 
     SavedCode
 )
-from django.conf import settings
-import os, requests, json, ast
+import json, ast
 from problems import middleware
 import cloudinary
 import cloudinary.uploader
@@ -54,8 +53,8 @@ class getProblemsList(APIView):
         req_data = request.data
         tags = req_data.get("tags")
         level = req_data.get("level")
-        # data = Problem.objects.filter(approved_by_admin = True)
-        data = Problem.objects.all()
+        data = Problem.objects.filter(approved_by_admin = True)
+        # data = Problem.objects.all()
         if tags and len(tags) > 0:
             data = data.filter(tags__in = tags).distinct()
         if level:
@@ -111,20 +110,6 @@ class UploadTestCases(APIView):
     def post(self, request):
         probId = request.data["probId"]
         problem = Problem.objects.get(id = probId)
-        send_data = {
-            "type" : "increase",
-            "field" : None
-        }
-        if problem.problem_level == "E":
-            send_data["field"] = "easy"
-        elif problem.problem_level == "M":
-            send_data["field"] = "medium"
-        elif problem.problem_level == "H":
-            send_data["field"] = "hard"
-        requests.post(
-            settings.AUTH_SERVER_URL + "auth/setFixedData/", 
-            data = send_data
-        )
         setattr(problem, "sample_Tc", request.data["custom_test_cases"])
         setattr(problem, "total_Tc", request.data["test_cases"])
         problem.save()
