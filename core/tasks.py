@@ -1,4 +1,4 @@
-import os, urllib3
+import os, urllib3, requests
 from celery import shared_task
 from problems.serializers import SubmissionSerializer
 from pathlib import Path
@@ -100,11 +100,11 @@ def runCode(self, context):
         inst.save()
         response = Submission.objects.filter(id = inst.id)
         if len(prev_submissions) == 0:
+            async_to_sync(channel_layer.group_send)("user_" + str(context["uid"]), {'type': 'sendStatus', 'text' : "inc_submissions/none/none"})
+            async_to_sync(channel_layer.group_send)("user_" + context["uid"], {'type': 'sendResult', 'text' : djSerializer.serialize('json', response)})
             prob_obj = Problem.objects.get(id = inst.problem_Id)
             prob_obj.totalSubmissions = prob_obj.totalSubmissions + 1;
             prob_obj.save()
-            async_to_sync(channel_layer.group_send)("user_" + str(context["uid"]), {'type': 'sendStatus', 'text' : "inc_submissions/none/none"})
-            async_to_sync(channel_layer.group_send)("user_" + context["uid"], {'type': 'sendResult', 'text' : djSerializer.serialize('json', response)})
         else:
             async_to_sync(channel_layer.group_send)("user_" + context["uid"], {'type': 'sendResult', 'text' : djSerializer.serialize('json', response)})
         return

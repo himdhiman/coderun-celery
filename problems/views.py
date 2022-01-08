@@ -106,19 +106,25 @@ class AddProblem(APIView):
         return Response(data = serializer_obj.errors, status = status.HTTP_400_BAD_REQUEST)
 
 
-class GetProblem(APIView):
-    permission_classes = (permissions.AllowAny, )
-    def get(self, request, id):
-        prob_obj = Problem.objects.get(id = id)
-        data = GetProblemSerializer(prob_obj)
-        return Response(data = data.data, status = status.HTTP_200_OK)
-
-
 class UploadTestCases(APIView):
     permission_classes = (permissions.AllowAny, )
     def post(self, request):
         probId = request.data["probId"]
         problem = Problem.objects.get(id = probId)
+        send_data = {
+            "type" : "increase",
+            "field" : None
+        }
+        if problem.problem_level == "E":
+            send_data["field"] = "easy"
+        elif problem.problem_level == "M":
+            send_data["field"] = "medium"
+        elif problem.problem_level == "H":
+            send_data["field"] = "hard"
+        requests.post(
+            settings.AUTH_SERVER_URL + "auth/setFixedData", 
+            data = send_data
+        )
         setattr(problem, "sample_Tc", request.data["custom_test_cases"])
         setattr(problem, "total_Tc", request.data["test_cases"])
         problem.save()
@@ -129,6 +135,14 @@ class UploadTestCases(APIView):
                 public_id = key, folder = f"TestCases/{str(probId)}/"
             )
         return Response(status = status.HTTP_200_OK)
+
+
+class GetProblem(APIView):
+    permission_classes = (permissions.AllowAny, )
+    def get(self, request, id):
+        prob_obj = Problem.objects.get(id = id)
+        data = GetProblemSerializer(prob_obj)
+        return Response(data = data.data, status = status.HTTP_200_OK)
 
 
 class HandleUpvoteDownvote(APIView):

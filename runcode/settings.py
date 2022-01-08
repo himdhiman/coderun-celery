@@ -111,6 +111,8 @@ CHANNEL_LAYERS = {
     },
 }
 
+AUTH_SERVER_URL = "https://db-auth.herokuapp.com/"
+
 # CHANNEL_LAYERS = {
 #     "default": {
 #         "BACKEND": "channels_redis.core.RedisChannelLayer",
