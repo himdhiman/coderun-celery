@@ -94,18 +94,15 @@ def runCode(self, context):
         else:
             setattr(inst, "status", "Error not defined")
         prev_submissions = Submission.objects.filter(created_By = inst.created_By, problem_Id = inst.problem_Id, score = prob.max_score)
-        print("outside", len(prev_submissions), type(len(prev_submissions)))
         setattr(inst, "test_Cases_Passed", counter)
         setattr(inst, "total_Test_Cases", totaltc)
         setattr(inst, "score", int((counter/totaltc))*prob.max_score)
         setattr(inst, "total_score", prob.max_score)
         inst.save()
         response = Submission.objects.filter(id = inst.id)
-        print("outside", len(prev_submissions), type(len(prev_submissions)))
         if len(prev_submissions) == 0:
             print(len(prev_submissions))
-            print("inside")
-            requests.post(settings.AUTH_SERVER_URL, data = {
+            requests.post(settings.AUTH_SERVER_URL + "auth/incScore/", data = {
                 "email" : inst.created_By,
                 "inc" : prob.max_score
             })
