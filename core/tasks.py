@@ -100,6 +100,7 @@ def runCode(self, context):
         setattr(inst, "total_score", prob.max_score)
         inst.save()
         response = Submission.objects.filter(id = inst.id)
+        print(len(prev_submissions))
         if len(prev_submissions) == 0:
             print(len(prev_submissions))
             requests.post(settings.AUTH_SERVER_URL + "auth/incScore/", data = {
