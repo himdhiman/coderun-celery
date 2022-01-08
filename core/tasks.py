@@ -96,9 +96,9 @@ def runCode(self, context):
         setattr(inst, "total_Test_Cases", totaltc)
         setattr(inst, "score", int((counter/totaltc))*prob.max_score)
         setattr(inst, "total_score", prob.max_score)
-        prev_submissions = Submission.objects.filter(created_By = inst.created_By, problem_Id = inst.problem_Id, score = F('total_score'))
         inst.save()
         response = Submission.objects.filter(id = inst.id)
+        prev_submissions = Submission.objects.filter(created_By = inst.created_By, problem_Id = inst.problem_Id, score = F('total_score'))
         if len(prev_submissions) == 0:
             async_to_sync(channel_layer.group_send)("user_" + str(context["uid"]), {'type': 'sendStatus', 'text' : "inc_submissions/none/none"})
             async_to_sync(channel_layer.group_send)("user_" + context["uid"], {'type': 'sendResult', 'text' : djSerializer.serialize('json', response)})
