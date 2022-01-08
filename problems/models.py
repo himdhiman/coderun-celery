@@ -1,4 +1,6 @@
 from django.db import models
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
 
 class Tag(models.Model):
     name = models.CharField(max_length = 20, unique=True)
@@ -34,7 +36,14 @@ class Problem(models.Model):
     up_votes = models.IntegerField(default = 0)
     down_votes = models.IntegerField(default = 0)
 
-
+    @receiver(pre_save)
+    def before_saving(sender, instance, *args, **kwargs):
+        if not instance.id:
+            print("New Object")
+            pass
+        else:
+            print(instance.id)
+    
     def __str__(self):
         return f"({self.id}) - " + self.title
 
