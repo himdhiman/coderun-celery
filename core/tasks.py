@@ -96,10 +96,6 @@ def runCode(self, context):
             setattr(inst, "status", "Error not defined")
         prev_submissions = Submission.objects.filter(created_By = inst.created_By, problem_Id = inst.problem_Id, score = F('score'))
         print(prev_submissions)
-        setattr(inst, "test_Cases_Passed", counter)
-        setattr(inst, "total_Test_Cases", totaltc)
-        setattr(inst, "score", int((counter/totaltc))*prob.max_score)
-        inst.save()
         response = Submission.objects.filter(id = inst.id)
         print(len(prev_submissions))
         if len(prev_submissions) == 0:
@@ -115,4 +111,8 @@ def runCode(self, context):
             prob_obj.save()
         else:
             async_to_sync(channel_layer.group_send)("user_" + context["uid"], {'type': 'sendResult', 'text' : djSerializer.serialize('json', response)})
+        setattr(inst, "test_Cases_Passed", counter)
+        setattr(inst, "total_Test_Cases", totaltc)
+        setattr(inst, "score", int((counter/totaltc))*prob.max_score)
+        inst.save()
         return
