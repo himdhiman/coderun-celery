@@ -93,7 +93,7 @@ def runCode(self, context):
             setattr(inst, "status", "Accepted")
         else:
             setattr(inst, "status", "Error not defined")
-        prev_submissions = Submission.objects.filter(created_By = inst.created_By, problem_Id = inst.problem_Id, score = F('total_score'))
+        prev_submissions = Submission.objects.filter(created_By = inst.created_By, problem_Id = inst.problem_Id, score = prob.max_score)
         print("outside", len(prev_submissions), type(len(prev_submissions)))
         setattr(inst, "test_Cases_Passed", counter)
         setattr(inst, "total_Test_Cases", totaltc)
