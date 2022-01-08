@@ -100,6 +100,7 @@ def runCode(self, context):
         response = Submission.objects.filter(id = inst.id)
         prev_submissions = Submission.objects.filter(created_By = inst.created_By, problem_Id = inst.problem_Id, score = F('total_score'))
         if len(prev_submissions) == 0:
+            print("insode it !!!!!")
             async_to_sync(channel_layer.group_send)("user_" + str(context["uid"]), {'type': 'sendStatus', 'text' : "inc_submissions/none/none"})
             async_to_sync(channel_layer.group_send)("user_" + context["uid"], {'type': 'sendResult', 'text' : djSerializer.serialize('json', response)})
             prob_obj = Problem.objects.get(id = inst.problem_Id)
