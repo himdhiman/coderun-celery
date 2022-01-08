@@ -22,11 +22,12 @@ def runCode(self, context):
     response = SubmissionSerializer(data = body)
     if(response.is_valid()):
         inst = response.save()
-        setattr(inst, "status", "Running")
-        setattr(inst, "task_id", self.request.id)
-        inst.save()
         probId = body["problem_Id"]
         prob = Problem.objects.get(id = probId)
+        setattr(inst, "status", "Running")
+        setattr(inst, "task_id", self.request.id)
+        setattr(inst, "total_score", prob.max_score)
+        inst.save()
         totaltc = prob.total_Tc
         counter = 0
     
@@ -93,11 +94,10 @@ def runCode(self, context):
             setattr(inst, "status", "Accepted")
         else:
             setattr(inst, "status", "Error not defined")
-        prev_submissions = Submission.objects.filter(created_By = inst.created_By, problem_Id = inst.problem_Id, score = prob.max_score)
+        prev_submissions = Submission.objects.filter(created_By = inst.created_By, problem_Id = inst.problem_Id, score = F('score'))
         setattr(inst, "test_Cases_Passed", counter)
         setattr(inst, "total_Test_Cases", totaltc)
         setattr(inst, "score", int((counter/totaltc))*prob.max_score)
-        setattr(inst, "total_score", prob.max_score)
         inst.save()
         response = Submission.objects.filter(id = inst.id)
         print(len(prev_submissions))
