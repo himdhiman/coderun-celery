@@ -122,7 +122,7 @@ class UploadTestCases(APIView):
         elif problem.problem_level == "H":
             send_data["field"] = "hard"
         requests.post(
-            settings.AUTH_SERVER_URL + "auth/setFixedData", 
+            settings.AUTH_SERVER_URL + "auth/setFixedData/", 
             data = send_data
         )
         setattr(problem, "sample_Tc", request.data["custom_test_cases"])
