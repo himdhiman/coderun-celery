@@ -36,14 +36,7 @@ class Problem(models.Model):
     up_votes = models.IntegerField(default = 0)
     down_votes = models.IntegerField(default = 0)
 
-    @receiver(pre_save)
-    def before_saving(sender, instance, *args, **kwargs):
-        if not instance.id:
-            print("New Object")
-            pass
-        else:
-            print(instance.id)
-    
+      
     def __str__(self):
         return f"({self.id}) - " + self.title
 
@@ -105,3 +98,11 @@ class SavedCode(models.Model):
     def __str__(self):
         return self.created_By
 
+
+@receiver(pre_save, sender = Problem)
+def before_saving_problem(sender, instance, *args, **kwargs):
+    if not instance.id:
+        print("New Object")
+        pass
+    else:
+        print(instance.id)
