@@ -102,17 +102,21 @@ def runCode(self, context):
             print(len(prev_submissions))
             requests.post(settings.AUTH_SERVER_URL + "auth/incScore/", data = {
                 "email" : inst.created_By,
-                "inc" : prob.max_score
+                "inc" : int((counter/totaltc))*prob.max_score
             })
+            setattr(inst, "test_Cases_Passed", counter)
+            setattr(inst, "total_Test_Cases", totaltc)
+            setattr(inst, "score", int((counter/totaltc))*prob.max_score)
+            inst.save()
             async_to_sync(channel_layer.group_send)("user_" + str(context["uid"]), {'type': 'sendStatus', 'text' : "inc_submissions/none/none"})
             async_to_sync(channel_layer.group_send)("user_" + context["uid"], {'type': 'sendResult', 'text' : djSerializer.serialize('json', response)})
             prob_obj = Problem.objects.get(id = inst.problem_Id)
             prob_obj.totalSubmissions = prob_obj.totalSubmissions + 1;
             prob_obj.save()
         else:
+            setattr(inst, "test_Cases_Passed", counter)
+            setattr(inst, "total_Test_Cases", totaltc)
+            setattr(inst, "score", int((counter/totaltc))*prob.max_score)
+            inst.save()
             async_to_sync(channel_layer.group_send)("user_" + context["uid"], {'type': 'sendResult', 'text' : djSerializer.serialize('json', response)})
-        setattr(inst, "test_Cases_Passed", counter)
-        setattr(inst, "total_Test_Cases", totaltc)
-        setattr(inst, "score", int((counter/totaltc))*prob.max_score)
-        inst.save()
         return
