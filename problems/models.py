@@ -104,7 +104,7 @@ class SavedCode(models.Model):
 @receiver(pre_save, sender = Problem)
 def before_saving_problem(sender, instance, *args, **kwargs):
     if not instance.id:
-        pass
+        return
     curr_instance = Problem.objects.get(id = instance.id)
     send_data = {}
 
