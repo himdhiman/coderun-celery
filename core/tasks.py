@@ -102,8 +102,10 @@ def runCode(self, context):
             print(len(prev_submissions))
             requests.post(settings.AUTH_SERVER_URL + "auth/incScore/", data = {
                 "email" : inst.created_By,
+                "problem_id" : int(probId),
                 "inc" : int((counter/totaltc))*prob.max_score,
-                "type" : prob.problem_level
+                "type" : prob.problem_level,
+                "date_time" : inst.submission_Date_Time
             })
             setattr(inst, "test_Cases_Passed", counter)
             setattr(inst, "total_Test_Cases", totaltc)
