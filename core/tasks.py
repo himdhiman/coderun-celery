@@ -100,12 +100,14 @@ def runCode(self, context):
         print(len(prev_submissions))
         if len(prev_submissions) == 0:
             print(len(prev_submissions))
+            send_date = inst.submission_Date_Time
+            send_date = send_date.split(" ")[0]
             requests.post(settings.AUTH_SERVER_URL + "auth/incScore/", data = {
                 "email" : inst.created_By,
                 "problem_id" : int(probId),
                 "inc" : int((counter/totaltc))*prob.max_score,
                 "type" : prob.problem_level,
-                "date_time" : inst.submission_Date_Time
+                "date_time" : send_date
             })
             setattr(inst, "test_Cases_Passed", counter)
             setattr(inst, "total_Test_Cases", totaltc)
