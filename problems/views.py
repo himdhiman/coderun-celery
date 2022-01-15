@@ -383,6 +383,24 @@ class GetsavedCode(APIView):
         return Response(data = data.data, status = status.HTTP_200_OK)
 
 
+class GetUserSubmissions(APIView):
+    permissions = (permissions.AllowAny, )
+
+    def get(self, request):
+        access_token = request.headers['Authorization'].split(' ')[1]
+        response = middleware.Authentication.isAuthenticated(access_token)
+        if not response["success"]:
+            data = {"success" : False, "message" : "Unauthorized Request !"}
+            return Response(data = data, status = status.HTTP_401_UNAUTHORIZED)
+        request_data = request.data
+        request_data["email"] = response['data']['email']   
+        data = Submission.objects.filter(
+            created_By = request_data["email"], 
+        ).order_by("-submission_Date_Time")
+        return_data = SubmissionListSerializer(data, many = True)
+        return Response(data = return_data.data, status = status.HTTP_200_OK)             
+
+
 
 
 

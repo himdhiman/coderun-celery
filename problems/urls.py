@@ -18,6 +18,8 @@ urlpatterns = [
     path('getEditorial/', views.GetEditorial.as_view()),
     path('saveCode/', views.SaveCodeCloud.as_view()),
     path("getSavedCode/<int:id>/", views.GetsavedCode.as_view()),
+    path("getUserSubmissions/", views.GetUserSubmissions.as_view()),
+
 
 
     
