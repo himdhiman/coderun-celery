@@ -16,6 +16,7 @@ import cloudinary
 import cloudinary.uploader
 import cloudinary.api
 from problems.serializers import (
+    AllSubmissionsSerializer,
     TagSerializer, 
     TagSerializerCreateProblem, 
     ProblemListSerializer, 
@@ -397,7 +398,7 @@ class GetUserSubmissions(APIView):
         data = Submission.objects.filter(
             created_By = request_data["email"], 
         ).order_by("-submission_Date_Time")
-        return_data = SubmissionListSerializer(data, many = True)
+        return_data = AllSubmissionsSerializer(data, many = True)
         return Response(data = return_data.data, status = status.HTTP_200_OK)             
 
 

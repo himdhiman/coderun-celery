@@ -90,6 +90,17 @@ class SubmissionListSerializer(serializers.ModelSerializer):
             'submission_Date_Time'
         ]
 
+class AllSubmissionsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Submission
+        fields = [
+            'problem_Id',
+            'language',
+            'status',
+            'score',
+            'total_score',
+            'submission_Date_Time'
+        ]
 
 class EditorialSerializer(serializers.ModelSerializer):
     id = serializers.ReadOnlyField()
