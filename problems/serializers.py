@@ -91,10 +91,18 @@ class SubmissionListSerializer(serializers.ModelSerializer):
         ]
 
 class AllSubmissionsSerializer(serializers.ModelSerializer):
+    id = serializers.ReadOnlyField()
+    problem_name = serializers.SerializerMethodField("get_name_function")
+
+    def get_name_function(self, obj):
+        return models.Problem.objects.get(id = obj.problem_Id).title
+
     class Meta:
         model = models.Submission
         fields = [
+            'id',
             'problem_Id',
+            'problem_name',
             'language',
             'status',
             'score',
