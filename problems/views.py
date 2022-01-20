@@ -336,7 +336,7 @@ class GetEditorial(APIView):
 class SaveCodeCloud(APIView):
     permissions = (permissions.AllowAny, )
 
-    @ratelimit(key='ip', rate='5/m')
+    # @ratelimit(key='ip', rate='5/m')
     def post(self, request):
         access_token = request.headers['Authorization'].split(' ')[1]
         response = middleware.Authentication.isAuthenticated(access_token)
