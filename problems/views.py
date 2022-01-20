@@ -29,6 +29,7 @@ from problems.serializers import (
 )
 from datetime import datetime
 from core.helper import encode_data, decode_data
+from ratelimit.decorators import ratelimit
 
 class getTagList(APIView):
     permission_classes = (permissions.AllowAny, )
@@ -335,6 +336,7 @@ class GetEditorial(APIView):
 class SaveCodeCloud(APIView):
     permissions = (permissions.AllowAny, )
 
+    @ratelimit(key='ip', rate='5/m')
     def post(self, request):
         access_token = request.headers['Authorization'].split(' ')[1]
         response = middleware.Authentication.isAuthenticated(access_token)
