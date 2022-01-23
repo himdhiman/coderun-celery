@@ -68,6 +68,7 @@ class SavedCodeAdmin(admin.ModelAdmin):
 
 
 admin.site.register(models.Tag)
+admin.site.register(models.CompanyTag)
 admin.site.register(models.Bookmark)
 admin.site.register(models.Problem, ProblemAdmin)
 admin.site.register(models.Submission, submissionAdmin)
