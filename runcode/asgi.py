@@ -6,12 +6,12 @@ from channels.routing import ProtocolTypeRouter, URLRouter
 
 from core.routing import ws_urlpatterns
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'runcode.settings')
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "runcode.settings")
 django.setup()
 
-application = ProtocolTypeRouter({
-    'http' : get_asgi_application(),
-    'websocket' : AuthMiddlewareStack(URLRouter(ws_urlpatterns))
-})
-
-
+application = ProtocolTypeRouter(
+    {
+        "http": get_asgi_application(),
+        "websocket": AuthMiddlewareStack(URLRouter(ws_urlpatterns)),
+    }
+)

@@ -6,17 +6,25 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('problems', '0008_auto_20211102_2132'),
+        ("problems", "0008_auto_20211102_2132"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='UpvotesDownvote',
+            name="UpvotesDownvote",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('mail_Id', models.CharField(max_length=50)),
-                ('upvote', models.TextField(blank=True, null=True)),
-                ('downvote', models.TextField(blank=True, null=True)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("mail_Id", models.CharField(max_length=50)),
+                ("upvote", models.TextField(blank=True, null=True)),
+                ("downvote", models.TextField(blank=True, null=True)),
             ],
         ),
     ]

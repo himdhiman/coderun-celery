@@ -6,18 +6,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('problems', '0001_initial'),
+        ("problems", "0001_initial"),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name='problem',
-            old_name='description',
-            new_name='note',
+            model_name="problem",
+            old_name="description",
+            new_name="note",
         ),
         migrations.AddField(
-            model_name='problem',
-            name='max_score',
+            model_name="problem",
+            name="max_score",
             field=models.IntegerField(blank=True, null=True),
         ),
     ]

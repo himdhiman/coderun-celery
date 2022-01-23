@@ -6,16 +6,16 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('problems', '0005_auto_20211102_1228'),
+        ("problems", "0005_auto_20211102_1228"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='submission',
-            name='input_Given',
+            model_name="submission",
+            name="input_Given",
         ),
         migrations.RemoveField(
-            model_name='submission',
-            name='output_Generated',
+            model_name="submission",
+            name="output_Generated",
         ),
     ]

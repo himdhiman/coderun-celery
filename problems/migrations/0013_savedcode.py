@@ -6,19 +6,30 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('problems', '0012_submission_task_id'),
+        ("problems", "0012_submission_task_id"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='SavedCode',
+            name="SavedCode",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created_By', models.CharField(max_length=50)),
-                ('problem_Id', models.IntegerField(blank=True, null=True)),
-                ('code', models.TextField(blank=True, null=True)),
-                ('language', models.CharField(max_length=50)),
-                ('submission_Date_Time', models.DateTimeField(auto_now=True, null=True)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("created_By", models.CharField(max_length=50)),
+                ("problem_Id", models.IntegerField(blank=True, null=True)),
+                ("code", models.TextField(blank=True, null=True)),
+                ("language", models.CharField(max_length=50)),
+                (
+                    "submission_Date_Time",
+                    models.DateTimeField(auto_now=True, null=True),
+                ),
             ],
         ),
     ]

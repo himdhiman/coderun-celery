@@ -6,19 +6,19 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('problems', '0007_delete_uploadtc'),
+        ("problems", "0007_delete_uploadtc"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='submission',
-            name='created_By',
-            field=models.CharField(default='C++ 17', max_length=50),
+            model_name="submission",
+            name="created_By",
+            field=models.CharField(default="C++ 17", max_length=50),
             preserve_default=False,
         ),
         migrations.AlterField(
-            model_name='submission',
-            name='language',
+            model_name="submission",
+            name="language",
             field=models.CharField(max_length=50),
         ),
     ]

@@ -3,17 +3,29 @@ from problems import models
 
 
 class submissionAdmin(admin.ModelAdmin):
-    list_display = ("created_By", "problem_name", "language", "status", "submission_Date_Time")
+    list_display = (
+        "created_By",
+        "problem_name",
+        "language",
+        "status",
+        "submission_Date_Time",
+    )
 
     def problem_name(self, obj):
-        prob_obj = models.Problem.objects.get(id = obj.problem_Id)
+        prob_obj = models.Problem.objects.get(id=obj.problem_Id)
         return prob_obj.title
 
+
 class editorialAdmin(admin.ModelAdmin):
-    list_display = ("problem_name", "CPP17", "Java", "Python3", )
+    list_display = (
+        "problem_name",
+        "CPP17",
+        "Java",
+        "Python3",
+    )
 
     def problem_name(self, obj):
-        prob_obj = models.Problem.objects.get(id = obj.problem_Id)
+        prob_obj = models.Problem.objects.get(id=obj.problem_Id)
         return prob_obj.title
 
     def CPP17(self, obj):
@@ -37,11 +49,23 @@ class editorialAdmin(admin.ModelAdmin):
 
 
 class ProblemAdmin(admin.ModelAdmin):
-    list_display = ("id", "title", "created_by", "problem_level", "approved_by_admin", )
+    list_display = (
+        "id",
+        "title",
+        "created_by",
+        "problem_level",
+        "approved_by_admin",
+    )
 
 
 class SavedCodeAdmin(admin.ModelAdmin):
-    list_display = ("created_By", "problem_Id", "language", "submission_Date_Time", )
+    list_display = (
+        "created_By",
+        "problem_Id",
+        "language",
+        "submission_Date_Time",
+    )
+
 
 admin.site.register(models.Tag)
 admin.site.register(models.Bookmark)
@@ -50,4 +74,3 @@ admin.site.register(models.Submission, submissionAdmin)
 admin.site.register(models.UpvotesDownvote)
 admin.site.register(models.Editorial, editorialAdmin)
 admin.site.register(models.SavedCode, SavedCodeAdmin)
-

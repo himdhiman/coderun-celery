@@ -6,27 +6,38 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('problems', '0002_auto_20211021_1557'),
+        ("problems", "0002_auto_20211021_1557"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Submission',
+            name="Submission",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created_by', models.CharField(blank=True, max_length=50, null=True)),
-                ('problemId', models.IntegerField()),
-                ('language', models.IntegerField()),
-                ('code', models.TextField()),
-                ('status', models.CharField(default='Queued', max_length=30)),
-                ('error', models.TextField(blank=True, null=True)),
-                ('input_Given', models.TextField(blank=True, null=True)),
-                ('output_Generated', models.TextField(blank=True, null=True)),
-                ('test_Cases_Passed', models.IntegerField(blank=True, null=True)),
-                ('total_Test_Cases', models.IntegerField(blank=True, null=True)),
-                ('score', models.IntegerField(blank=True, null=True)),
-                ('total_score', models.IntegerField(blank=True, null=True)),
-                ('submission_Date_Time', models.DateTimeField(auto_now=True, null=True)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("created_by", models.CharField(blank=True, max_length=50, null=True)),
+                ("problemId", models.IntegerField()),
+                ("language", models.IntegerField()),
+                ("code", models.TextField()),
+                ("status", models.CharField(default="Queued", max_length=30)),
+                ("error", models.TextField(blank=True, null=True)),
+                ("input_Given", models.TextField(blank=True, null=True)),
+                ("output_Generated", models.TextField(blank=True, null=True)),
+                ("test_Cases_Passed", models.IntegerField(blank=True, null=True)),
+                ("total_Test_Cases", models.IntegerField(blank=True, null=True)),
+                ("score", models.IntegerField(blank=True, null=True)),
+                ("total_score", models.IntegerField(blank=True, null=True)),
+                (
+                    "submission_Date_Time",
+                    models.DateTimeField(auto_now=True, null=True),
+                ),
             ],
         ),
     ]
