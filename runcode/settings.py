@@ -67,27 +67,27 @@ ASGI_APPLICATION = "runcode.asgi.application"
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': os.environ.get('DB_NAME'),
-#         'USER': os.environ.get('DB_USER'),
-#         'PASSWORD': os.environ.get('DB_PASSWORD'),
-#         'HOST': os.environ.get('DB_HOST'),
-#         'PORT': 5432,
-#     }
-# }
-
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": "d7l1t76omfkjru",
-        "USER": "bzhgtmkcbhcpba",
-        "PASSWORD": "fa95ce814dc88c9eb078a2f4806091b6815345788e7021d6c4ac49df9eb3307c",
-        "HOST": "ec2-34-202-178-115.compute-1.amazonaws.com",
-        "PORT": 5432,
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ.get('DB_NAME'),
+        'USER': os.environ.get('DB_USER'),
+        'PASSWORD': os.environ.get('DB_PASSWORD'),
+        'HOST': os.environ.get('DB_HOST'),
+        'PORT': 5432,
     }
 }
+
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.postgresql",
+#         "NAME": "d7l1t76omfkjru",
+#         "USER": "bzhgtmkcbhcpba",
+#         "PASSWORD": "fa95ce814dc88c9eb078a2f4806091b6815345788e7021d6c4ac49df9eb3307c",
+#         "HOST": "ec2-34-202-178-115.compute-1.amazonaws.com",
+#         "PORT": 5432,
+#     }
+# }
 
 # DATABASES = {
 #     'default': {
@@ -100,27 +100,27 @@ DATABASES = {
 #     }
 # }
 
-CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "channels_redis.core.RedisChannelLayer",
-        "CONFIG": {
-            "hosts": [
-                "redis://:dPpnlozbZyVtoWAqlMOOFxZ8RvNxNPbp@redis-12814.c15.us-east-1-4.ec2.cloud.redislabs.com:12814"
-            ],
-        },
-    },
-}
-
-AUTH_SERVER_URL = "https://db-auth.herokuapp.com/"
-
 # CHANNEL_LAYERS = {
 #     "default": {
 #         "BACKEND": "channels_redis.core.RedisChannelLayer",
 #         "CONFIG": {
-#             "hosts": [("localhost", 6379)],
+#             "hosts": [
+#                 "redis://:dPpnlozbZyVtoWAqlMOOFxZ8RvNxNPbp@redis-12814.c15.us-east-1-4.ec2.cloud.redislabs.com:12814"
+#             ],
 #         },
 #     },
 # }
+
+AUTH_SERVER_URL = "https://db-auth.herokuapp.com/"
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("redis", 6379)],
+        },
+    },
+}
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -162,8 +162,8 @@ MEDIA_URL = "/media/"
 
 # Celery Settings
 
-CELERY_BROKER_URL = "redis://:dPpnlozbZyVtoWAqlMOOFxZ8RvNxNPbp@redis-12814.c15.us-east-1-4.ec2.cloud.redislabs.com:12814"
-# CELERY_BROKER_URL = 'redis://localhost:6379'
+# CELERY_BROKER_URL = "redis://:dPpnlozbZyVtoWAqlMOOFxZ8RvNxNPbp@redis-12814.c15.us-east-1-4.ec2.cloud.redislabs.com:12814"
+CELERY_BROKER_URL = 'redis://redis:6379/'
 
 CELERY_ACCEPT_CONTENT = ["application/json"]
 CELERY_RESULT_SERIALIZER = "json"

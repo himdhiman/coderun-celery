@@ -1,9 +1,4 @@
-version: "3"
-
-# networks:
-#   dirtybitsnetwork:
-#     name: dirtybitsnetwork
-#     driver: bridge
+version: "3.8"
 
 services:
   code_web:
@@ -21,10 +16,33 @@ services:
       - DB_NAME=code
       - DB_USER=server
       - DB_PASSWORD=server
-    # networks:
-    #   - dirtybitsnetwork
     depends_on:
       - code_db
+      - redis
+  daphne:
+    build: .
+    command: "daphne runcode.asgi:application --bind 0.0.0.0 --port 8001"
+    volumes:
+      - .:/app
+    ports:
+      - "8001:8001"
+    depends_on:
+      - code_db
+      - redis
+      - celery
+  redis:
+    image: redis:3.2
+    command: redis-server
+    ports:
+      - "6379:6379"
+  celery:
+    build: .
+    command: celery -A runcode.celery worker -l INFO
+    volumes:
+      - .:/app
+    depends_on:
+      - code_web
+      - redis
   code_db:
     image: postgres
     container_name: code_db
@@ -32,7 +50,9 @@ services:
       - POSTGRES_DB=code
       - POSTGRES_USER=server
       - POSTGRES_PASSWORD=server
+    volumes:
+      - pgdata:/var/lib/postgresql/data/
     ports:
       - "5432:5432"
-    # networks:
-    #   - dirtybitsnetwork
+volumes:
+  pgdata:
