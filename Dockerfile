@@ -17,6 +17,8 @@ RUN python3 manage.py collectstatic --noinput
 # RUN python3 manage.py migrate
 
 
+
+
 # CMD gunicorn runcode.wsgi:application --bind 0.0.0.0:$PORT
 
 #

@@ -1,5 +1,11 @@
 version: "3.8"
 
+networks:
+  dirtybits:
+    name: dirtybits
+    driver: bridge
+    attachable: false
+
 services:
   code_web:
     build: .
@@ -19,6 +25,8 @@ services:
     depends_on:
       - code_db
       - redis
+    networks:
+      - dirtybits
   daphne:
     build: .
     command: "daphne runcode.asgi:application --bind 0.0.0.0 --port 8001"
@@ -30,19 +38,31 @@ services:
       - code_db
       - redis
       - celery
+    networks:
+      - dirtybits
   redis:
-    image: redis:3.2
+    image: redis
     command: redis-server
     ports:
       - "6379:6379"
+    networks:
+      - dirtybits
   celery:
     build: .
-    command: celery -A runcode.celery worker -l INFO
+    command: celery -A runcode.celery worker -l debug
     volumes:
       - .:/app
+    environment:
+      - DB_HOST=code_db
+      - DB_NAME=code
+      - DB_USER=server
+      - DB_PASSWORD=server
     depends_on:
       - code_web
+      - code_db
       - redis
+    networks:
+      - dirtybits
   code_db:
     image: postgres
     container_name: code_db
@@ -54,5 +74,21 @@ services:
       - pgdata:/var/lib/postgresql/data/
     ports:
       - "5432:5432"
+    networks:
+      - dirtybits
+  nginx:
+    image: nginx
+    networks:
+      - dirtybits
+    volumes:
+      - ./nginx:/etc/nginx/conf.d
+      - ./static:/static
+    ports:
+      - "8080:80"
+    depends_on:
+      - celery
+      - redis
+      - daphne
+      - code_web
 volumes:
   pgdata:
