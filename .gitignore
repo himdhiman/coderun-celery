@@ -203,3 +203,9 @@ dmypy.json
     Blog
     About
 
+
+admin
+html
+js
+rest_framework
+staticfiles.json

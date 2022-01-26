@@ -15,13 +15,8 @@ services:
              gunicorn runcode.wsgi:application --bind 0.0.0.0:8000"
     volumes:
       - .:/app
-    ports:
-      - "8000:8000"
-    environment:
-      - DB_HOST=code_db
-      - DB_NAME=code
-      - DB_USER=server
-      - DB_PASSWORD=server
+    env_file:
+      - .env
     depends_on:
       - code_db
       - redis
@@ -32,8 +27,8 @@ services:
     command: "daphne runcode.asgi:application --bind 0.0.0.0 --port 8001"
     volumes:
       - .:/app
-    ports:
-      - "8001:8001"
+    env_file:
+      - .env
     depends_on:
       - code_db
       - redis
@@ -43,8 +38,8 @@ services:
   redis:
     image: redis
     command: redis-server
-    ports:
-      - "6379:6379"
+    volumes:
+      - .:/app
     networks:
       - dirtybits
   celery:
@@ -52,11 +47,8 @@ services:
     command: celery -A runcode.celery worker -l debug
     volumes:
       - .:/app
-    environment:
-      - DB_HOST=code_db
-      - DB_NAME=code
-      - DB_USER=server
-      - DB_PASSWORD=server
+    env_file:
+      - .env
     depends_on:
       - code_web
       - code_db
@@ -66,14 +58,10 @@ services:
   code_db:
     image: postgres
     container_name: code_db
-    environment:
-      - POSTGRES_DB=code
-      - POSTGRES_USER=server
-      - POSTGRES_PASSWORD=server
+    env_file:
+      - .env
     volumes:
       - pgdata:/var/lib/postgresql/data/
-    ports:
-      - "5432:5432"
     networks:
       - dirtybits
   nginx:

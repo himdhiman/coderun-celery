@@ -6,7 +6,7 @@ import cloudinary.api
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = "xd(marrvy5-oq7i&ihaae&p62$g+3#%$#i7$qntva70wpbl^b!"
+SECRET_KEY = os.environ.get("SECRET_KEY")
 
 DEBUG = True
 
@@ -111,13 +111,13 @@ DATABASES = {
 #     },
 # }
 
-AUTH_SERVER_URL = "https://db-auth.herokuapp.com/"
+AUTH_SERVER_URL = os.environ.get("AUTH_SERVER")
 
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [("redis", 6379)],
+            "hosts": [os.environ.get("REDIS_HOST")],
         },
     },
 }
@@ -163,7 +163,7 @@ MEDIA_URL = "/media/"
 # Celery Settings
 
 # CELERY_BROKER_URL = "redis://:dPpnlozbZyVtoWAqlMOOFxZ8RvNxNPbp@redis-12814.c15.us-east-1-4.ec2.cloud.redislabs.com:12814"
-CELERY_BROKER_URL = 'redis://redis:6379/'
+CELERY_BROKER_URL = os.environ.get("REDIS_HOST")
 
 CELERY_ACCEPT_CONTENT = ["application/json"]
 CELERY_RESULT_SERIALIZER = "json"
@@ -172,17 +172,16 @@ CELERY_TIMEZONE = "Asia/Kolkata"
 
 CELERY_RESULT_BACKEND = "django-db"
 
-
 CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
 
 
 # Cloudinary Settings
 
 cloudinary.config(
-    cloud_name="hhikcz56h",
-    api_key="538462597997963",
-    api_secret="cJfOCiWn0bF6LXTwYZCpUinCJpw",
-    secure=True,
+    cloud_name = os.environ.get("cloud_name"),
+    api_key = os.environ.get("api_key"),
+    api_secret = os.environ.get("api_secret"),
+    secure = True,
 )
 
 DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
