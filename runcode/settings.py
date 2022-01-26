@@ -78,39 +78,6 @@ DATABASES = {
     }
 }
 
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.postgresql",
-#         "NAME": "d7l1t76omfkjru",
-#         "USER": "bzhgtmkcbhcpba",
-#         "PASSWORD": "fa95ce814dc88c9eb078a2f4806091b6815345788e7021d6c4ac49df9eb3307c",
-#         "HOST": "ec2-34-202-178-115.compute-1.amazonaws.com",
-#         "PORT": 5432,
-#     }
-# }
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'runcode',
-#         'USER': 'postgres',
-#         'PASSWORD': 'Himanshu',
-#         'HOST': 'localhost',
-#         'PORT': 5432,
-#     }
-# }
-
-# CHANNEL_LAYERS = {
-#     "default": {
-#         "BACKEND": "channels_redis.core.RedisChannelLayer",
-#         "CONFIG": {
-#             "hosts": [
-#                 "redis://:dPpnlozbZyVtoWAqlMOOFxZ8RvNxNPbp@redis-12814.c15.us-east-1-4.ec2.cloud.redislabs.com:12814"
-#             ],
-#         },
-#     },
-# }
-
 AUTH_SERVER_URL = os.environ.get("AUTH_SERVER")
 
 CHANNEL_LAYERS = {
@@ -162,7 +129,6 @@ MEDIA_URL = "/media/"
 
 # Celery Settings
 
-# CELERY_BROKER_URL = "redis://:dPpnlozbZyVtoWAqlMOOFxZ8RvNxNPbp@redis-12814.c15.us-east-1-4.ec2.cloud.redislabs.com:12814"
 CELERY_BROKER_URL = os.environ.get("REDIS_HOST")
 
 CELERY_ACCEPT_CONTENT = ["application/json"]
