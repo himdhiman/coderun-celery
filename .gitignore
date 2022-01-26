@@ -204,8 +204,8 @@ dmypy.json
     About
 
 
-admin
-html
-js
-rest_framework
-staticfiles.json
+# admin
+# html
+# js
+# rest_framework
+# staticfiles.json
