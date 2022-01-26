@@ -1,3 +1,4 @@
+from turtle import title
 from rest_framework import permissions, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -57,15 +58,26 @@ class getProblemsList(APIView):
     permission_classes = (permissions.AllowAny,)
 
     def get(self, request):
+        data = Problem.objects.filter(approved_by_admin=True)
+        data = ProblemListSerializer(data, many=True, context={})
+        return Response(data=data.data, status=status.HTTP_200_OK)
+
+
+class getFilteredProblemList(APIView):
+    permission_classes = (permissions.AllowAny,)
+    
+    def get(self, request):
         req_data = request.data
         tags = req_data.get("tags")
-        level = req_data.get("level")
+        difficulty = req_data.get("difficulty")
+        keyword = req_data.get("keyword")
         data = Problem.objects.filter(approved_by_admin=True)
-        # data = Problem.objects.all()
+        if keyword:
+            data = data.filter(title__icontains = keyword).distinct()
         if tags and len(tags) > 0:
-            data = data.filter(tags__in=tags).distinct()
-        if level:
-            data = data.filter(problem_level=level).distinct()
+            data = data.filter(tags__in = tags).distinct()
+        if difficulty:
+            data = data.filter(problem_level__in = difficulty).distinct()
         data = ProblemListSerializer(data, many=True, context={})
         return Response(data=data.data, status=status.HTTP_200_OK)
 
