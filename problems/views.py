@@ -71,10 +71,10 @@ class getFilteredProblemList(APIView):
         difficulty = req_data.get("difficulty")
         keyword = req_data.get("keyword")
         data = Problem.objects.filter(approved_by_admin=True)
-        if keyword:
+        if keyword and keyword != "":
             data = data.filter(title__icontains = keyword).distinct()
         if tags and len(tags) > 0:
-            data = data.filter(tags__in = tags).distinct()
+            data = data.filter(tags__id__in = tags).distinct()
         if difficulty:
             data = data.filter(problem_level__in = difficulty).distinct()
         data = ProblemListSerializer(data, many=True, context={})
