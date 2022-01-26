@@ -14,7 +14,7 @@ from django.conf import settings
 BASE_DIR = Path(__file__).resolve().parent.parent
 channel_layer = get_channel_layer()
 http = urllib3.PoolManager()
-BASE_URL = settings.CLOUDINARY_URL
+BASE_URL = "https://res.cloudinary.com/hhikcz56h/raw/upload/v1636969572/TestCases/"
 
 
 @shared_task(bind=True)
