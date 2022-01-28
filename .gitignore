@@ -163,7 +163,7 @@ celerybeat-schedule
 *.sage.py
 
 # Environments
-.env
+*.env
 .venv
 env/
 venv/
@@ -203,9 +203,3 @@ dmypy.json
     Blog
     About
 
-
-# admin
-# html
-# js
-# rest_framework
-# staticfiles.json
