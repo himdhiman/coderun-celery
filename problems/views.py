@@ -65,8 +65,10 @@ class getProblemsList(APIView):
 class getFilteredProblemList(APIView):
     permission_classes = (permissions.AllowAny,)
     
-    def get(self, request):
+    def post(self, request):
+        print(request)
         req_data = request.data
+        print(req_data)
         tags = req_data.get("tags")
         difficulty = req_data.get("difficulty")
         keyword = req_data.get("keyword")
@@ -77,7 +79,7 @@ class getFilteredProblemList(APIView):
             data = data.filter(tags__id__in = tags).distinct()
         if difficulty and len(difficulty) > 0:
             data = data.filter(problem_level__in = difficulty).distinct()
-        data = ProblemListSerializer(data, many=True, context={})
+        data = ProblemListSerializer(data, many=True)
         return Response(data=data.data, status=status.HTTP_200_OK)
 
 
