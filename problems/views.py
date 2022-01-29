@@ -134,7 +134,7 @@ class UpdateProblem(APIView):
         problem = Problem.objects.get(id = request_data["id"])
         for key, value in request_data.items():
             if key == "tags":
-                pass
+                problem.tags.set(value)
             elif key != "id":
                 setattr(problem, key, value)
         problem.save()

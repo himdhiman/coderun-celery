@@ -78,11 +78,6 @@ class ProblemSerializer(serializers.ModelSerializer):
             "memory_Limit",
         ]
 
-    def update(self, instance, validated_data):
-        for key, value in validated_data.items():
-            setattr(instance, key, value)
-        instance.save()
-
 
 class GetProblemSerializer(serializers.ModelSerializer):
     tags = TagSerializer(many=True)
