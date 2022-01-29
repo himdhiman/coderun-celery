@@ -75,7 +75,7 @@ class getFilteredProblemList(APIView):
             data = data.filter(title__icontains = keyword).distinct()
         if tags and len(tags) > 0:
             data = data.filter(tags__id__in = tags).distinct()
-        if difficulty:
+        if difficulty and len(difficulty) > 0:
             data = data.filter(problem_level__in = difficulty).distinct()
         data = ProblemListSerializer(data, many=True, context={})
         return Response(data=data.data, status=status.HTTP_200_OK)
