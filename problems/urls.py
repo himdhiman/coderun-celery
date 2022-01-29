@@ -10,6 +10,7 @@ urlpatterns = [
     path("getProblemsStatus/", views.getProblemsStatus.as_view()),
     path("getTagListCreateProblem/", views.getTagListCreateProblem.as_view()),
     path("addProblem/", views.AddProblem.as_view()),
+    path("updateProblem/", views.UpdateProblem.as_view()),
     path("getProblem/<int:id>/", views.GetProblem.as_view()),
     path("uploadTC/", views.UploadTestCases.as_view()),
     path("handleupvotedownvote/", views.HandleUpvoteDownvote.as_view()),

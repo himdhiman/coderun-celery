@@ -121,6 +121,24 @@ class AddProblem(APIView):
             return Response(data=return_data, status=status.HTTP_201_CREATED)
         return Response(data=serializer_obj.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class UpdateProblem(APIView):
+    permission_classes = (permissions.AllowAny,)
+
+    def post(self, request):
+        access_token = request.headers["Authorization"].split(" ")[1]
+        response = middleware.Authentication.isAuthenticated(access_token)
+        if not response["success"]:
+            data = {"success": False, "message": "Unauthorized Request !"}
+            return Response(data=data, status=status.HTTP_401_UNAUTHORIZED)
+        request_data = request.data["data"]
+        problem = Problem.objects.get(id = request_data["id"])
+        for key, value in request_data.items():
+            if key == "tags":
+                pass
+            elif key != "id":
+                setattr(problem, key, value)
+        problem.save()
+        return Response(status=status.HTTP_202_ACCEPTED)
 
 class UploadTestCases(APIView):
     permission_classes = (permissions.AllowAny,)
