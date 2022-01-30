@@ -6,20 +6,30 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('problems', '0013_savedcode'),
+        ("problems", "0013_savedcode"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='CompanyTag',
+            name="CompanyTag",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=20, unique=True)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=20, unique=True)),
             ],
         ),
         migrations.AddField(
-            model_name='problem',
-            name='company_tags',
-            field=models.ManyToManyField(to='problems.CompanyTag', verbose_name='list of company tags'),
+            model_name="problem",
+            name="company_tags",
+            field=models.ManyToManyField(
+                to="problems.CompanyTag", verbose_name="list of company tags"
+            ),
         ),
     ]

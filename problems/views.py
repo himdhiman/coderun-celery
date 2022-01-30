@@ -35,7 +35,7 @@ from ratelimit.decorators import ratelimit
 class getTagList(APIView):
     permission_classes = (permissions.AllowAny,)
 
-    def get(self, request):
+    def get(self, _):
         data = Tag.objects.all().order_by("name")
         data = TagSerializer(data, many=True)
         return Response(data=data.data, status=status.HTTP_200_OK)
@@ -44,7 +44,7 @@ class getTagList(APIView):
 class getTagListCreateProblem(APIView):
     permission_classes = (permissions.AllowAny,)
 
-    def get(self, request):
+    def get(self, _):
         data = Tag.objects.all().order_by("name")
         data = TagSerializerCreateProblem(data, many=True)
         res_dict = {}
@@ -56,7 +56,7 @@ class getTagListCreateProblem(APIView):
 class getProblemsList(APIView):
     permission_classes = (permissions.AllowAny,)
 
-    def get(self, request):
+    def get(self, _):
         data = Problem.objects.filter(approved_by_admin=True)
         data = ProblemListSerializer(data, many=True, context={})
         return Response(data=data.data, status=status.HTTP_200_OK)
@@ -64,21 +64,19 @@ class getProblemsList(APIView):
 
 class getFilteredProblemList(APIView):
     permission_classes = (permissions.AllowAny,)
-    
+
     def post(self, request):
-        print(request)
         req_data = request.data
-        print(req_data)
         tags = req_data.get("tags")
         difficulty = req_data.get("difficulty")
         keyword = req_data.get("keyword")
         data = Problem.objects.filter(approved_by_admin=True)
         if keyword and keyword != "":
-            data = data.filter(title__icontains = keyword).distinct()
+            data = data.filter(title__icontains=keyword).distinct()
         if tags and len(tags) > 0:
-            data = data.filter(tags__id__in = tags).distinct()
+            data = data.filter(tags__id__in=tags).distinct()
         if difficulty and len(difficulty) > 0:
-            data = data.filter(problem_level__in = difficulty).distinct()
+            data = data.filter(problem_level__in=difficulty).distinct()
         data = ProblemListSerializer(data, many=True)
         return Response(data=data.data, status=status.HTTP_200_OK)
 
@@ -123,6 +121,7 @@ class AddProblem(APIView):
             return Response(data=return_data, status=status.HTTP_201_CREATED)
         return Response(data=serializer_obj.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 class UpdateProblem(APIView):
     permission_classes = (permissions.AllowAny,)
 
@@ -133,7 +132,7 @@ class UpdateProblem(APIView):
             data = {"success": False, "message": "Unauthorized Request !"}
             return Response(data=data, status=status.HTTP_401_UNAUTHORIZED)
         request_data = request.data["data"]
-        problem = Problem.objects.get(id = request_data["id"])
+        problem = Problem.objects.get(id=request_data["id"])
         for key, value in request_data.items():
             if key == "tags":
                 problem.tags.set(value)
@@ -141,6 +140,7 @@ class UpdateProblem(APIView):
                 setattr(problem, key, value)
         problem.save()
         return Response(status=status.HTTP_202_ACCEPTED)
+
 
 class UploadTestCases(APIView):
     permission_classes = (permissions.AllowAny,)
@@ -164,7 +164,7 @@ class UploadTestCases(APIView):
 class GetProblem(APIView):
     permission_classes = (permissions.AllowAny,)
 
-    def get(self, request, id):
+    def get(self, _, id):
         prob_obj = Problem.objects.get(id=id)
         data = GetProblemSerializer(prob_obj)
         return Response(data=data.data, status=status.HTTP_200_OK)
@@ -375,7 +375,6 @@ class GetEditorial(APIView):
 class SaveCodeCloud(APIView):
     permissions = (permissions.AllowAny,)
 
-    # @ratelimit(key='ip', rate='5/m')
     def post(self, request):
         access_token = request.headers["Authorization"].split(" ")[1]
         response = middleware.Authentication.isAuthenticated(access_token)

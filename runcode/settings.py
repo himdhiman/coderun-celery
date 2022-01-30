@@ -68,13 +68,13 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('DB_NAME'),
-        'USER': os.environ.get('DB_USER'),
-        'PASSWORD': os.environ.get('DB_PASSWORD'),
-        'HOST': os.environ.get('DB_HOST'),
-        'PORT': 5432,
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.environ.get("DB_NAME"),
+        "USER": os.environ.get("DB_USER"),
+        "PASSWORD": os.environ.get("DB_PASSWORD"),
+        "HOST": os.environ.get("DB_HOST"),
+        "PORT": 5432,
     }
 }
 
@@ -144,11 +144,10 @@ CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
 # Cloudinary Settings
 
 cloudinary.config(
-    cloud_name = os.environ.get("cloud_name"),
-    api_key = os.environ.get("api_key"),
-    api_secret = os.environ.get("api_secret"),
-    secure = True,
+    cloud_name=os.environ.get("cloud_name"),
+    api_key=os.environ.get("api_key"),
+    api_secret=os.environ.get("api_secret"),
+    secure=True,
 )
 
 DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
-# CLOUDINARY_URL = os.environ.get("CLOUDINARY_URL")
