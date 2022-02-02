@@ -9,6 +9,7 @@ from problems.models import (
     Bookmark,
     Editorial,
     SavedCode,
+    ProblemMedia,
 )
 import json, ast
 from problems import middleware
@@ -99,7 +100,6 @@ class getProblemsStatus(APIView):
             data="Authorization Failed", status=status.HTTP_401_UNAUTHORIZED
         )
 
-
 class AddProblem(APIView):
     permission_classes = (permissions.AllowAny,)
 
@@ -111,15 +111,19 @@ class AddProblem(APIView):
             return Response(data=data, status=status.HTTP_401_UNAUTHORIZED)
         request_data = request.data["data"]
         request_data["created_by"] = response["data"]["email"]
+        public_ids = request_data.pop("public_ids")
         serializer_obj = ProblemSerializer(data=request_data)
         if serializer_obj.is_valid():
             obj = serializer_obj.save()
             setattr(obj, "max_score", 100)
             obj.save()
+            for p_id in public_ids:
+                ProblemMedia.objects.create(problem = obj, public_id = p_id)
             return_data = serializer_obj.data
             return_data["id"] = obj.id
             return Response(data=return_data, status=status.HTTP_201_CREATED)
         return Response(data=serializer_obj.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 
 class UpdateProblem(APIView):

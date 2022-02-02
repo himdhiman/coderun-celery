@@ -1,10 +1,11 @@
 from pyexpat import model
 from unittest.util import _MAX_LENGTH
 from django.db import models
-from django.db.models.signals import pre_save
+from django.db.models.signals import pre_save, pre_delete
 from django.dispatch import receiver
-import requests
+import requests, threading
 from django.conf import settings
+from problems.helper import delete_cloudinary_image
 
 
 class Tag(models.Model):
@@ -55,6 +56,15 @@ class Problem(models.Model):
     def __str__(self):
         return f"({self.id}) - " + self.title
 
+
+class ProblemMedia(models.Model):
+    problem = models.ForeignKey(Problem, on_delete=models.CASCADE)
+    media_type = models.CharField(max_length=20, blank=True, null=True, default="image")
+    public_id = models.CharField(blank=True, null=True, max_length=200)
+
+
+    def __str__(self):
+        return self.problem.title
 
 class Bookmark(models.Model):
     user = models.EmailField(max_length=150)
@@ -114,6 +124,13 @@ class SavedCode(models.Model):
     def __str__(self):
         return self.created_By
 
+@receiver(pre_delete, sender=ProblemMedia)
+def before_deleting_avatar(sender, instance, *args, **kwargs):
+    threading.Thread(
+        target=delete_cloudinary_image, args=(instance.public_id, instance.media_type)
+    ).start()
+    return
+
 
 @receiver(pre_save, sender=Problem)
 def before_saving_problem(sender, instance, *args, **kwargs):
@@ -135,4 +152,9 @@ def before_saving_problem(sender, instance, *args, **kwargs):
     elif curr_instance.approved_by_admin and instance.approved_by_admin == False:
         send_data["type"] = "decrease"
         requests.post(settings.AUTH_SERVER_URL + "auth/setFixedData/", data=send_data)
+    return
+
+@receiver(pre_delete, sender=Problem)
+def before_deleting_problem(sender, instance, *args, **kwargs):
+
     return
