@@ -11,6 +11,13 @@ class TagSerializer(serializers.ModelSerializer):
         model = models.Tag
         fields = "__all__"
 
+class CompanyTagsSerializer(serializers.ModelSerializer):
+    id = serializers.ReadOnlyField()
+
+    class Meta:
+        model = models.CompanyTag
+        fields = "__all__"
+
 
 class TagSerializerCreateProblem(serializers.ModelSerializer):
     id = serializers.ReadOnlyField()
@@ -81,6 +88,7 @@ class ProblemSerializer(serializers.ModelSerializer):
 
 class GetProblemSerializer(serializers.ModelSerializer):
     tags = TagSerializer(many=True)
+    company_tags = CompanyTagsSerializer(many=True)
 
     class Meta:
         model = models.Problem
